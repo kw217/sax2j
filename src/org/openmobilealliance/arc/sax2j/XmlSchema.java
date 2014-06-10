@@ -1,5 +1,7 @@
 // XmlSchema.java
 // (C) COPYRIGHT METASWITCH NETWORKS 2014
+// TODO: Decide on correct copyright banner.
+// TODO: Decide on correct package name.
 package org.openmobilealliance.arc.sax2j;
 
 import java.io.File;
