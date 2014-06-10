@@ -16,6 +16,9 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.xml.sax.SAXException;
 
+/**
+ * Check the parser correctly rejects some invalid schemas.
+ */
 @RunWith(Parameterized.class)
 public class InvalidSchemasTest
 {

@@ -19,6 +19,16 @@ import org.xml.sax.SAXException;
 public class XmlSchema
 {
   /**
+   * The resolver we use.
+   */
+  private static final Resolver sResolver = new Resolver();
+  static
+  {
+    sResolver.setRetrievalEnabled(true);
+    sResolver.setProgressWriter(new ConsoleProgressWriter());
+  }
+
+  /**
    * The parsed XML schema.
    */
   private final Schema mSchema;
@@ -32,6 +42,7 @@ public class XmlSchema
   public XmlSchema(File xiFile) throws SAXException
   {
     SchemaFactory lFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+    lFactory.setResourceResolver(sResolver);
     Source lSchemaSource = new StreamSource(xiFile);
     mSchema = lFactory.newSchema(lSchemaSource);
   }
