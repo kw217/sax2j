@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Sample bad XSD file: incorrect closing delimiter xs:schema -->
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+   targetNamespace="http://www.example.org/sax2j/test/bad1"
+   xmlns="http://www.example.org/sax2j/test/bad1" version="1.0">
+
+   <xsd:element name="nmsEventList" type="NmsEventList" />
+
+   <xsd:complexType name="NmsEventList">
+      <xsd:sequence>
+         <xsd:element name="nmsEvent" type="NmsEvent" maxOccurs="unbounded" minOccurs="0" />
+         <xsd:element name="callbackData" type="xsd:string" maxOccurs="1" minOccurs="0" />
+         <xsd:element name="index" type="xsd:unsignedLong" maxOccurs="1" minOccurs="0" />
+         <xsd:element name="restartToken" type="xsd:string" maxOccurs="1" minOccurs="0" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:complexType name="NmsEvent">
+     <xsd:sequence>
+      <xsd:choice maxOccurs="1" minOccurs="1">
+         <xsd:element name="deletedObject" type="DeletedObject" maxOccurs="1" minOccurs="1" />
+         <xsd:element name="deletedFolder" type="DeletedFolder" maxOccurs="1" minOccurs="1" />
+         <xsd:element name="expiredObject" type="DeletedObject" maxOccurs="1" minOccurs="1" />
+         <xsd:element name="expiredFolder" type="DeletedFolder" maxOccurs="1" minOccurs="1" />
+         <xsd:element name="changedObject" type="ChangedObject" maxOccurs="1" minOccurs="1" />
+         <xsd:element name="changedFolder" type="ChangedFolder" maxOccurs="1" minOccurs="1" />
+         <xsd:element name="resetBox"      type="ResetBox" maxOccurs="1" minOccurs="1" />
+      </xsd:choice>
+     </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:complexType name="DeletedObject">
+      <xsd:sequence>
+     <xsd:element name="resourceURL" type="xsd:anyURI" maxOccurs="1" minOccurs="1" />
+     <xsd:element name="lastModSeq" type="xsd:unsignedLong" maxOccurs="1" minOccurs="0" />
+     <xsd:element name="correlationId" type="xsd:string" maxOccurs="1" minOccurs="0" />
+     <xsd:element name="correlationTag" type="xsd:string" maxOccurs="1" minOccurs="0" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:complexType name="DeletedFolder">
+      <xsd:sequence>
+     <xsd:element name="resourceURL" type="xsd:anyURI" maxOccurs="1" minOccurs="1" />
+     <xsd:element name="lastModSeq" type="xsd:unsignedLong" maxOccurs="1" minOccurs="0" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:complexType name="ChangedObject">
+      <xsd:sequence>
+     <xsd:element name="parentFolder" type="xsd:anyURI" maxOccurs="1" minOccurs="1" />
+     <xsd:element name="flags" type="FlagList" maxOccurs="1" minOccurs="1" />
+     <xsd:element name="resourceURL" type="xsd:anyURI" maxOccurs="1" minOccurs="1" />
+     <xsd:element name="lastModSeq" type="xsd:unsignedLong" maxOccurs="1" minOccurs="0" />
+     <xsd:element name="correlationId" type="xsd:string" maxOccurs="1" minOccurs="0" />
+     <xsd:element name="correlationTag" type="xsd:string" maxOccurs="1" minOccurs="0" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:complexType name="ChangedFolder">
+      <xsd:sequence>
+     <xsd:element name="parentFolder" type="xsd:anyURI" maxOccurs="1" minOccurs="1" />
+         <xsd:element name="resourceURL" type="xsd:anyURI" maxOccurs="1" minOccurs="1" />
+       <xsd:element name="name" type="xsd:string" maxOccurs="1" minOccurs="1" />
+     <xsd:element name="lastModSeq" type="xsd:unsignedLong" maxOccurs="1" minOccurs="0" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:complexType name="ResetBox"/>
+
+   <xsd:complexType name="FlagList">
+     <xsd:sequence>
+       <xsd:element name="flag" type="Flag" maxOccurs="unbounded" minOccurs="0" />
+       <xsd:element name="resourceURL" type="xsd:anyURI" maxOccurs="1" minOccurs="0" />
+     </xsd:sequence>
+   </xsd:complexType>
+
+</xs:schema>
