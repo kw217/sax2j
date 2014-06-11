@@ -1,4 +1,4 @@
-// XmlSchemaTest.java
+// InvalidXmlTest.java
 // (C) COPYRIGHT METASWITCH NETWORKS 2014
 package org.openmobilealliance.arc.sax2j;
 

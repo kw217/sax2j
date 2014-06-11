@@ -10,6 +10,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
 public class XmlDocument
@@ -81,5 +85,65 @@ public class XmlDocument
     {
       throw new RuntimeException("PSVI not supported by document");
     }
+  }
+
+  // TODO tidy up this quick test implementation
+  public void walk()
+  {
+    walk("", mDoc.getDocumentElement());
+  }
+
+  // TODO tidy up this quick test implementation
+  void walk(String xiIndent, Element xiElement)
+  {
+    mProgress.log(xiIndent + "<" + xiElement.getTagName() + ">");
+    String lIndent = xiIndent + "  ";
+
+    NodeList lNodes = xiElement.getChildNodes();
+    int lNumNodes = lNodes.getLength();
+
+    for (int i = 0; i < lNumNodes; i++)
+    {
+      Node lNode = lNodes.item(i);
+
+      switch (lNode.getNodeType())
+      {
+        case Node.ATTRIBUTE_NODE:
+          break;
+
+        case Node.ELEMENT_NODE:
+        {
+          walk(lIndent, (Element)lNode);
+        }
+        break;
+
+        case Node.TEXT_NODE:
+        {
+          Text lText = (Text)lNode;
+          mProgress.log(lIndent + lText.getNodeValue());
+        }
+          break;
+
+        default:
+        {
+          throw new RuntimeException("Unsupported node type " + lNode.getNodeType() + " at node " + lNode);
+        }
+      }
+
+      // TODO: Handle other types, especially attribute
+      if (lNode.getNodeType() == Node.ELEMENT_NODE)
+      {
+      }
+    }
+
+    mProgress.log(xiIndent + "</" + xiElement.getTagName() + ">");
+  }
+
+  /**
+   * @return this document, converted to JSON
+   */
+  public String toJson()
+  {
+    return "haha fooled you";
   }
 }
