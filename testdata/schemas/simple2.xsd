@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Valid XML Schema testing some XSD 1.1 features -->
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+   targetNamespace="http://www.example.org/sax2j/test/simple2"
+   xmlns="http://www.example.org/sax2j/test/simple2" version="1.0">
+
+   <xsd:element name="fancyStuff" type="FancyType" />
+
+   <xsd:complexType name="FancyType">
+      <xsd:sequence>
+        <xsd:element name="theDate" type="xsd:dateTimeStamp" maxOccurs="1" minOccurs="1" />
+        <xsd:element name="number" type="xsd:float" maxOccurs="1" minOccurs="1" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+</xsd:schema>

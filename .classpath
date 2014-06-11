@@ -4,5 +4,12 @@
 	<classpathentry kind="src" path="testsrc"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="lib/xerces-2_11_0-xml-schema-1.1-beta/cupv10k-runtime.jar"/>
+	<classpathentry kind="lib" path="lib/xerces-2_11_0-xml-schema-1.1-beta/icu4j.jar"/>
+	<classpathentry kind="lib" path="lib/xerces-2_11_0-xml-schema-1.1-beta/org.eclipse.wst.xml.xpath2.processor_1.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/xerces-2_11_0-xml-schema-1.1-beta/resolver.jar"/>
+	<classpathentry kind="lib" path="lib/xerces-2_11_0-xml-schema-1.1-beta/serializer.jar"/>
+	<classpathentry kind="lib" path="lib/xerces-2_11_0-xml-schema-1.1-beta/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="lib/xerces-2_11_0-xml-schema-1.1-beta/xml-apis.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

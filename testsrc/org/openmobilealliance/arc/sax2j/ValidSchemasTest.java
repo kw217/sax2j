@@ -25,6 +25,7 @@ public class ValidSchemasTest
     return Arrays.asList(new Object[][]
     {
      { "simple1.xsd" },
+     { "simple2.xsd" },
      { "OMA-SUP-XSD_rest_netapi_nms-V1_0-20140527-D.xsd" },
     });
   }

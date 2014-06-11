@@ -21,13 +21,23 @@ import org.xml.sax.SAXException;
 public class XmlSchema
 {
   /**
+   * Use XML Schema 1.1? (vs 1.0)
+   */
+  private static final boolean sUseXsd11 = true;
+
+  /**
+   * The progress writer we use.
+   */
+  private static final ProgressWriter sProgress = new ConsoleProgressWriter();
+
+  /**
    * The resolver we use.
    */
   private static final Resolver sResolver = new Resolver();
   static
   {
     sResolver.setRetrievalEnabled(true);
-    sResolver.setProgressWriter(new ConsoleProgressWriter());
+    sResolver.setProgressWriter(sProgress);
   }
 
   /**
@@ -43,9 +53,13 @@ public class XmlSchema
    */
   public XmlSchema(File xiFile) throws SAXException
   {
-    SchemaFactory lFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+    String lSchemaLanguage = sUseXsd11 ? "http://www.w3.org/XML/XMLSchema/v1.1"
+                                         : XMLConstants.W3C_XML_SCHEMA_NS_URI;
+    SchemaFactory lFactory = SchemaFactory.newInstance(lSchemaLanguage);
+    sProgress.log("Using XML Schema " + (sUseXsd11 ? "1.1" : "1.0"));
     lFactory.setResourceResolver(sResolver);
     Source lSchemaSource = new StreamSource(xiFile);
     mSchema = lFactory.newSchema(lSchemaSource);
+    sProgress.log("Parsed schema " + xiFile);
   }
 }
