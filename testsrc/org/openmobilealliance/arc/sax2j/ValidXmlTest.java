@@ -49,13 +49,8 @@ public class ValidXmlTest
   public void test() throws Exception
   {
     mSchema = new XmlSchema(new File(SCHEMA_DIR, mSchemaName));
-    mDoc = mSchema.parse(new File(XML_DIR, mDocName));
-  }
-
-  @Test
-  public void testAlt() throws Exception
-  {
-    mSchema = new XmlSchema(new File(SCHEMA_DIR, mSchemaName));
+    mSchema.parse();
     mDoc = new XmlDocument(mSchema, new File(XML_DIR, mDocName));
+    mDoc.parse();
   }
 }

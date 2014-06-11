@@ -22,20 +22,20 @@ public class ThrowingErrorHandler implements ErrorHandler
   @Override
   public void error(SAXParseException xiException) throws SAXException
   {
-    System.err.println("ERROR: " + xiException);
+    mProgress.log("ERROR: " + xiException);
     throw xiException;
   }
 
   @Override
   public void fatalError(SAXParseException xiException) throws SAXException
   {
-    System.err.println("FATAL: " + xiException);
+    mProgress.log("FATAL: " + xiException);
     throw xiException;
   }
 
   @Override
   public void warning(SAXParseException xiException) throws SAXException
   {
-    mProgress.log("WARNING: " + xiException.toString());
+    mProgress.log("WARNING: " + xiException);
   }
 }

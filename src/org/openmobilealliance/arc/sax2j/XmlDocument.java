@@ -9,7 +9,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.xerces.jaxp.DocumentBuilderFactoryImpl;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -21,59 +20,66 @@ public class XmlDocument
   private ProgressWriter mProgress = new ProgressWriter.NullProgressWriter();
 
   /**
-   * The schema we were parsed with.
+   * The schema to parse with.
    */
   private final XmlSchema mSchema;
 
   /**
-   * The parsed DOM document.
+   * The file to parse.
    */
-  private final Document mDoc;
+  private final File mDocFile;
 
   /**
-   * Constructor. Accessible only from within package - constructed by
-   * XmlSchema.
-   * @param xiSchema the schema that parsed this.
+   * The parsed DOM document.
    */
-  XmlDocument(XmlSchema xiSchema)
+  private Document mDoc;
+
+  /**
+   * Construct an XML document. Use {@link #parse()} to parse it.
+   *
+   * @param xiSchema
+   * @param xiFile
+   */
+  public XmlDocument(XmlSchema xiSchema, File xiFile)
   {
     mSchema = xiSchema;
-    mDoc = null;
-  }
-
-  public XmlDocument(XmlSchema xiSchema, File xiFile) throws ParserConfigurationException, SAXException, IOException
-  {
-    // Thanks http://xerces.apache.org/xerces2-j/faq-dom.html#faq-8
-    DocumentBuilderFactoryImpl lFactory = (DocumentBuilderFactoryImpl)DocumentBuilderFactory.newInstance(DocumentBuilderFactoryImpl.class.getName(), null);
-    lFactory.setNamespaceAware(true);
-    lFactory.setValidating(true);
-    lFactory.setAttribute("http://apache.org/xml/features/validation/schema", Boolean.TRUE);
-    lFactory.setAttribute("http://apache.org/xml/features/validation/schema-full-checking", Boolean.TRUE);
-    lFactory.setAttribute("http://apache.org/xml/properties/dom/document-class-name", "org.apache.xerces.dom.PSVIDocumentImpl");
-    lFactory.setSchema(xiSchema.getSchema());
-    // Undocumented but necessary to force the
-    // org.apache.xerces.impl.xs.XmlSchemaValidator to actually use our schema
-    // - otherwise the above schema doesn't make it all the way down the
-    // stack. Sigh.
-    lFactory.setAttribute("http://apache.org/xml/properties/internal/grammar-pool", xiSchema.getSchema());
-    DocumentBuilder lBuilder = lFactory.newDocumentBuilder();
-
-    ThrowingErrorHandler lErrors = new ThrowingErrorHandler();
-    lErrors.setProgressWriter(mProgress);
-    lBuilder.setErrorHandler(lErrors);
-
-    mDoc = lBuilder.parse(xiFile);
-
-    if (!mDoc.getDocumentElement().isSupported("psvi", "1.0"))
-    {
-      throw new RuntimeException("PSVI not supported by document");
-    }
-
-    mSchema = null;
+    mDocFile = xiFile;
   }
 
   public void setProgressWriter(ProgressWriter xiProgress)
   {
     mProgress = xiProgress;
+  }
+
+  /**
+   * Parse the given XML document using the given schema.
+   *
+   * @throws ParserConfigurationException
+   * @throws SAXException
+   * @throws IOException
+   */
+  public void parse()
+      throws ParserConfigurationException, SAXException, IOException
+  {
+    if (mDoc != null)
+    {
+      throw new RuntimeException("Already parsed");
+    }
+
+    // Get a parser.
+    DocumentBuilderFactory lFactory = mSchema.getDocumentBuilderFactory();
+    DocumentBuilder lBuilder = lFactory.newDocumentBuilder();
+    ThrowingErrorHandler lErrors = new ThrowingErrorHandler();
+    lErrors.setProgressWriter(mProgress);
+    lBuilder.setErrorHandler(lErrors);
+
+    // Parse.
+    mDoc = lBuilder.parse(mDocFile);
+
+    // Check we're all hunky-dory.
+    if (!mDoc.getDocumentElement().isSupported("psvi", "1.0"))
+    {
+      throw new RuntimeException("PSVI not supported by document");
+    }
   }
 }

@@ -5,18 +5,15 @@
 package org.openmobilealliance.arc.sax2j;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 
 import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Source;
-import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
 
-import org.xml.sax.InputSource;
+import org.apache.xerces.jaxp.DocumentBuilderFactoryImpl;
 import org.xml.sax.SAXException;
 
 /**
@@ -28,69 +25,100 @@ public class XmlSchema
   /**
    * Use XML Schema 1.1? (vs 1.0)
    */
-  private static final boolean sUseXsd11 = true;
+  private final boolean sUseXsd11 = true;
 
   /**
    * The progress writer we use.
    */
-  private static final ProgressWriter sProgress = new ConsoleProgressWriter();
+  private ProgressWriter mProgress = new ProgressWriter.NullProgressWriter();
 
   /**
    * The resolver we use.
    */
-  private static final Resolver sResolver = new Resolver();
-  static
+  private final Resolver mResolver = new Resolver();
   {
-    sResolver.setRetrievalEnabled(true);
-    sResolver.setProgressWriter(sProgress);
+    mResolver.setRetrievalEnabled(true);
+    mResolver.setProgressWriter(mProgress);
   }
+
+  /**
+   * The file to parse.
+   */
+  private final File mSchemaFile;
 
   /**
    * The parsed XML schema.
    */
-  private final Schema mSchema;
+  private Schema mSchema;
 
   /**
-   * Construct (and parse) a new schema from file.
+   * Construct a new schema from file. Use {@link #parse()} to parse it.
    *
    * @param xiFile the file
+   */
+  public XmlSchema(File xiFile)
+  {
+    mSchemaFile = xiFile;
+  }
+
+  public void setProgressWriter(ProgressWriter xiProgress)
+  {
+    mProgress = xiProgress;
+  }
+
+  /**
+   * Parse the schema.
+   *
    * @throws SAXException
    */
-  public XmlSchema(File xiFile) throws SAXException
+  public void parse() throws SAXException
   {
+    if (mSchema != null)
+    {
+      throw new RuntimeException("Already parsed");
+    }
+
     String lSchemaLanguage = sUseXsd11 ? "http://www.w3.org/XML/XMLSchema/v1.1"
                                          : XMLConstants.W3C_XML_SCHEMA_NS_URI;
     SchemaFactory lFactory = SchemaFactory.newInstance(lSchemaLanguage);
-    sProgress.log("Using XML Schema " + (sUseXsd11 ? "1.1" : "1.0"));
-    lFactory.setResourceResolver(sResolver);
-    Source lSchemaSource = new StreamSource(xiFile);
+    mProgress.log("Using XML Schema " + (sUseXsd11 ? "1.1" : "1.0"));
+    lFactory.setResourceResolver(mResolver);
+    Source lSchemaSource = new StreamSource(mSchemaFile);
     mSchema = lFactory.newSchema(lSchemaSource);
-    sProgress.log("Parsed schema " + xiFile);
+    mProgress.log("Parsed schema " + mSchemaFile);
   }
 
   /**
-   * Parse the given document according to this schema.
-   *
-   * @param xiFile the XML file to parse
-   * @return the parsed document
+   * @return a factory for parsers that use this schema.
    */
-  public XmlDocument parse(File xiFile) throws IOException, SAXException
+  DocumentBuilderFactory getDocumentBuilderFactory()
   {
-    // TODO: Is SAX the right kind of parser?
-    Source lDocument = new SAXSource(new InputSource(new FileInputStream(xiFile)));
-    Validator lValidator = mSchema.newValidator();
+    if (mSchema == null)
+    {
+      throw new RuntimeException("Not yet parsed");
+    }
 
-    // TODO: This makes the parsing happen in XmlSchema not XmlDocument,
-    // which is architecturally questionable.
-    lValidator.validate(lDocument);
-    XmlDocument lret = new XmlDocument(this);
-    lret.setProgressWriter(sProgress);
-    return lret;
-  }
+    // Thanks http://xerces.apache.org/xerces2-j/faq-dom.html#faq-8
+    DocumentBuilderFactoryImpl lFactory =
+        (DocumentBuilderFactoryImpl)DocumentBuilderFactory.newInstance(
+                             DocumentBuilderFactoryImpl.class.getName(), null);
+    lFactory.setNamespaceAware(true);
+    lFactory.setValidating(true);
+    lFactory.setAttribute("http://apache.org/xml/features/validation/schema",
+                          Boolean.TRUE);
+    lFactory.setAttribute("http://apache.org/xml/features/validation/schema-full-checking",
+                          Boolean.TRUE);
+    lFactory.setAttribute("http://apache.org/xml/properties/dom/document-class-name",
+                          "org.apache.xerces.dom.PSVIDocumentImpl");
 
-  // TODO: temporary
-  Schema getSchema()
-  {
-    return mSchema;
+    lFactory.setSchema(mSchema);
+    // Undocumented but necessary to force the
+    // org.apache.xerces.impl.xs.XmlSchemaValidator to actually use our schema
+    // - otherwise the above schema doesn't make it all the way down the
+    // stack. Sigh.
+    lFactory.setAttribute("http://apache.org/xml/properties/internal/grammar-pool",
+                          mSchema);
+
+    return lFactory;
   }
 }

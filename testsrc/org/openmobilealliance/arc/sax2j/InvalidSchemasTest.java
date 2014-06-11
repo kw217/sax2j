@@ -48,9 +48,11 @@ public class InvalidSchemasTest
   @Test
   public void test()
   {
+    mSchema = new XmlSchema(new File(SCHEMA_DIR, mFilename));
+
     try
     {
-      mSchema = new XmlSchema(new File(SCHEMA_DIR, mFilename));
+      mSchema.parse();
       fail("Should have thrown!");
     }
     catch (SAXException e)

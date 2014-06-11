@@ -56,9 +56,13 @@ public class InvalidXmlTest
   public void test() throws Exception
   {
     mSchema = new XmlSchema(new File(SCHEMA_DIR, mSchemaName));
+    mSchema.parse();
+
+    mDoc = new XmlDocument(mSchema, new File(XML_DIR, mDocName));
+
     try
     {
-      mDoc = mSchema.parse(new File(XML_DIR, mDocName));
+      mDoc.parse();
       fail("Should have thrown!");
     }
     catch (SAXException e)
@@ -66,20 +70,4 @@ public class InvalidXmlTest
       assertThat(e.getMessage(), containsString(mMessage));
     }
   }
-
-  @Test
-  public void testAlt() throws Exception
-  {
-    mSchema = new XmlSchema(new File(SCHEMA_DIR, mSchemaName));
-    try
-    {
-      mDoc = new XmlDocument(mSchema, new File(XML_DIR, mDocName));
-      fail("Should have thrown!");
-    }
-    catch (SAXException e)
-    {
-      assertThat(e.getMessage(), containsString(mMessage));
-    }
-  }
-
 }
