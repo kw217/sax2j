@@ -27,6 +27,9 @@ public class ValidXmlTest
     {
      { "simple1.xsd", "simple1-ok.xml" },
      { "simple2.xsd", "simple2-ok.xml" },
+     // TODO: Re-enable once Xerces2-J is fixed to support the revised lexical
+     // space of xsd:float.
+     // { "simple2.xsd", "simple2-ok2.xml" },
     });
   }
 
@@ -47,5 +50,12 @@ public class ValidXmlTest
   {
     mSchema = new XmlSchema(new File(SCHEMA_DIR, mSchemaName));
     mDoc = mSchema.parse(new File(XML_DIR, mDocName));
+  }
+
+  @Test
+  public void testAlt() throws Exception
+  {
+    mSchema = new XmlSchema(new File(SCHEMA_DIR, mSchemaName));
+    mDoc = new XmlDocument(mSchema, new File(XML_DIR, mDocName));
   }
 }

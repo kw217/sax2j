@@ -76,11 +76,21 @@ public class XmlSchema
    */
   public XmlDocument parse(File xiFile) throws IOException, SAXException
   {
+    // TODO: Is SAX the right kind of parser?
     Source lDocument = new SAXSource(new InputSource(new FileInputStream(xiFile)));
     Validator lValidator = mSchema.newValidator();
+
+    // TODO: This makes the parsing happen in XmlSchema not XmlDocument,
+    // which is architecturally questionable.
     lValidator.validate(lDocument);
     XmlDocument lret = new XmlDocument(this);
     lret.setProgressWriter(sProgress);
     return lret;
+  }
+
+  // TODO: temporary
+  Schema getSchema()
+  {
+    return mSchema;
   }
 }
