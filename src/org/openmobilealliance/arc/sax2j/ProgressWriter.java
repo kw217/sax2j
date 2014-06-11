@@ -13,4 +13,16 @@ public interface ProgressWriter
    * @param xiMessage Message to display (with no trailing newline).
    */
   public void log(String xiMessage);
+
+  /**
+   * Progress writer that writes nothing.
+   */
+  public class NullProgressWriter implements ProgressWriter
+  {
+    @Override
+    public void log(String xiMessage)
+    {
+      // do nothing
+    }
+  }
 }

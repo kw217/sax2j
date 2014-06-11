@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- This has a parse error (mismatched element). -->
 <nms:nmsEventList xmlns:nms="http://www.example.org/sax2j/test/simple1">
   <nmsEvent>
     <changedObject>
@@ -11,8 +12,8 @@
   <nmsEvent>
     <resetBox/>
   </nmsEvent>
-  <callbackData>This is some data</callbackData>
-  <index>42</index>
+  <callbackData>This is some data</index>
+  <callbackData>42</index>
   <restartToken>from this very instant</restartToken>
 </nms:nmsEventList>
 

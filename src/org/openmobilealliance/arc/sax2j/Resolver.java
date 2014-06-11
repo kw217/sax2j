@@ -35,14 +35,7 @@ public class Resolver implements LSResourceResolver
     };
 
     private boolean mIsRetrievalEnabled;
-    private ProgressWriter mProgress = new ProgressWriter()
-    {
-      @Override
-      public void log(String xiMessage)
-      {
-        // do nothing
-      }
-    };
+    private ProgressWriter mProgress = new ProgressWriter.NullProgressWriter();
 
     /**
      * Constructor.

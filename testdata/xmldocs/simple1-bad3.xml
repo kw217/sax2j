@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- This is bad because it has an unknown element. -->
 <nms:nmsEventList xmlns:nms="http://www.example.org/sax2j/test/simple1">
   <nmsEvent>
     <changedObject>
@@ -9,7 +10,7 @@
     </changedObject>
   </nmsEvent>
   <nmsEvent>
-    <resetBox/>
+    <resetbox/>
   </nmsEvent>
   <callbackData>This is some data</callbackData>
   <index>42</index>

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- This is bad because two elements are in the wrong order. -->
 <nms:nmsEventList xmlns:nms="http://www.example.org/sax2j/test/simple1">
   <nmsEvent>
     <changedObject>
-      <parentFolder>http://www.example.org/parent</parentFolder>
       <flags><flag>\Seen</flag><flag>\Flagged</flag></flags>
+      <parentFolder>http://www.example.org/parent</parentFolder>
       <resourceURL>http://www.example.org/this</resourceURL>
       <lastModSeq>0</lastModSeq>
     </changedObject>

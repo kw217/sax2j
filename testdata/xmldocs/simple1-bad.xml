@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nms:nmsEventList xmlns:nms="http://www.example.org/sax2j/test/simple1">
+<!-- This is bad because it qualifies all elements, not just
+     global ones, contrary to the schema.
+     See http://stackoverflow.com/questions/17173383/ -->
+<nmsEventList xmlns="http://www.example.org/sax2j/test/simple1">
   <nmsEvent>
     <changedObject>
       <parentFolder>http://www.example.org/parent</parentFolder>
@@ -14,5 +17,5 @@
   <callbackData>This is some data</callbackData>
   <index>42</index>
   <restartToken>from this very instant</restartToken>
-</nms:nmsEventList>
+</nmsEventList>
 

@@ -5,13 +5,18 @@
 package org.openmobilealliance.arc.sax2j;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 import javax.xml.XMLConstants;
 import javax.xml.transform.Source;
+import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
@@ -61,5 +66,21 @@ public class XmlSchema
     Source lSchemaSource = new StreamSource(xiFile);
     mSchema = lFactory.newSchema(lSchemaSource);
     sProgress.log("Parsed schema " + xiFile);
+  }
+
+  /**
+   * Parse the given document according to this schema.
+   *
+   * @param xiFile the XML file to parse
+   * @return the parsed document
+   */
+  public XmlDocument parse(File xiFile) throws IOException, SAXException
+  {
+    Source lDocument = new SAXSource(new InputSource(new FileInputStream(xiFile)));
+    Validator lValidator = mSchema.newValidator();
+    lValidator.validate(lDocument);
+    XmlDocument lret = new XmlDocument(this);
+    lret.setProgressWriter(sProgress);
+    return lret;
   }
 }

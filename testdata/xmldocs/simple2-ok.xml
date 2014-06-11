@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fancyStuff xmlns="http://www.example.org/sax2j/test/simple2">
+  <theDate>2014-06-11T12:23:18Z</theDate>
+  <number>+INF</number>
+</fancyStuff>
+
