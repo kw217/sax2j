@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="lib/xerces-2_11_0-xml-schema-1.1-beta/serializer.jar"/>
 	<classpathentry kind="lib" path="lib/xerces-2_11_0-xml-schema-1.1-beta/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="lib/xerces-2_11_0-xml-schema-1.1-beta/xml-apis.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang3-3.3.2/commons-lang3-3.3.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
