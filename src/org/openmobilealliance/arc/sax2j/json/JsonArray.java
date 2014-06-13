@@ -26,9 +26,11 @@ public class JsonArray implements JsonValue
   }
 
   @Override
-  public void render(StringBuilder xiBuffer, RenderParams xiParams)
+  public void render(StringBuilder xiBuffer, RenderParams xiOuter)
   {
     xiBuffer.append("[");
+//    xiBuffer.append(xiOuter.toString());
+    RenderParams lInner = xiOuter.indent(false);
 
     boolean lFirst = true;
     for (JsonValue lValue : mValues)
@@ -36,13 +38,28 @@ public class JsonArray implements JsonValue
       if (lFirst)
       {
         lFirst = false;
+        if (xiOuter.mDirtyLine)
+        {
+          lInner.doIndent(xiBuffer);
+        }
+        else
+        {
+          xiBuffer.append(xiOuter.mFirstSpacing);
+        }
       }
       else
       {
-        xiBuffer.append(", ");
+        xiBuffer.append(",").append(xiOuter.mCommaSpacing);
+        lInner.doIndent(xiBuffer);
       }
 
-      lValue.render(xiBuffer, xiParams);
+      lValue.render(xiBuffer, lInner);
+    }
+
+    if (mValues.size() > 0)
+    {
+      xiOuter.doIndent(xiBuffer);
+      xiBuffer.append(xiOuter.mLastSpacing);
     }
 
     xiBuffer.append("]");
