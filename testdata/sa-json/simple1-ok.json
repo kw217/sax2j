@@ -1,20 +1,22 @@
-{ "nmsEventList":
-  { "nmsEvent": [
-      { "changedObject":
-        { "parentFolder": "http://www.example.org/parent",
-          "flags": [
-            { "flag": "\\Seen" },
-            { "flag": "\\Flagged" }
-          ],
+{ "nmsEventList": {
+    "nmsEvent": [
+      { "changedObject": {
+          "parentFolder": "http://www.example.org/parent",
+          "flags": {
+            "flag": [
+              "\\Seen",
+              "\\Flagged"
+            ]
+          },
           "resourceURL": "http://www.example.org/this",
           "lastModSeq": 0
         }
       },
-      { "resetBox": null }
+      { "resetBox": null
+      }
     ],
     "callbackData": "This is some data",
     "index": 42,
     "restartToken": "from this very instant"
   }
 }
-

@@ -13,7 +13,8 @@ public class TestJsonValue
         .put("charlie", JsonNumber.create("52"))
         .put("alpha", JsonArray.create()
              .add(JsonString.create("Hello"))
-             .add(JsonString.create("World")))
+             .add(JsonString.create("World"))
+             .add(JsonString.create("\"\\/\b\f\n\r\t\'<>&\u0000\u4eac\u90fd")))
         .put("bravo", JsonNull.create())
         .put("delta", JsonArray.create())
         .put("echo", JsonArray.create()
@@ -28,7 +29,8 @@ public class TestJsonValue
     RenderParams lParams = RenderParams.createCompact();
     StringBuilder lBuilder = new StringBuilder();
     mValue.render(lBuilder, lParams);
-    String lCompact = "{\"charlie\": 52, \"alpha\": [\"Hello\", \"World\"], " +
+    String lCompact = "{\"charlie\": 52, \"alpha\": [\"Hello\", \"World\", " +
+        "\"\\\"\\\\/\\b\\f\\n\\r\\t'<>&\\u0000\\u4EAC\\u90FD\"], " +
         "\"bravo\": null, \"delta\": [], \"echo\": [{\"nested\": \"tahi\", " +
         "\"also\": 2, \"empty\": {}}]}";
     assertEquals(lCompact, lBuilder.toString());
@@ -44,7 +46,8 @@ public class TestJsonValue
         "{ \"charlie\": 52,\n" +
         "  \"alpha\": [\n" +
         "    \"Hello\",\n" +
-        "    \"World\"\n" +
+        "    \"World\",\n" +
+        "    \"\\\"\\\\/\\b\\f\\n\\r\\t'<>&\\u0000\\u4EAC\\u90FD\"\n" +
         "  ],\n" +
         "  \"bravo\": null,\n" +
         "  \"delta\": [],\n" +

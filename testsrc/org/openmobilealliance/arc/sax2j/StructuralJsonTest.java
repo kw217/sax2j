@@ -43,6 +43,13 @@ public class StructuralJsonTest
   private XmlSchema mSchema;
   private XmlDocument mDoc;
 
+  /**
+   * Test structure-aware conversion of XML to JSON.
+   *
+   * @param xiSchemaName
+   * @param xiDocName
+   * @param xiJsonName
+   */
   public StructuralJsonTest(String xiSchemaName,
                             String xiDocName,
                             String xiJsonName)
@@ -67,7 +74,7 @@ public class StructuralJsonTest
     StringBuilder lBuffer = new StringBuilder();
     RenderParams lParams = RenderParams.createPretty();
     lJson.render(lBuffer, lParams);
-    String lActual = lBuffer.toString();
+    String lActual = lBuffer.toString() + "\n";
     assertEquals("JSON document generated from " + mDocName + " and " + mSchemaName,
                  lExpected,
                  lActual);
