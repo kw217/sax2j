@@ -13,6 +13,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+import org.openmobilealliance.arc.sax2j.XmlDocument.TranslationMode;
+import org.openmobilealliance.arc.sax2j.json.JsonValue;
+import org.openmobilealliance.arc.sax2j.json.RenderParams;
 
 /**
  * Check the parser accepts some valid documents.
@@ -60,7 +63,11 @@ public class StructuralJsonTest
     mDoc = new XmlDocument(mSchema, new File(XML_DIR, mDocName));
     mDoc.parse();
 
-    String lActual = mDoc.toJson();
+    JsonValue lJson = mDoc.toJson(TranslationMode.STRUCTURE_AWARE);
+    StringBuilder lBuffer = new StringBuilder();
+    RenderParams lParams = RenderParams.createPretty();
+    lJson.render(lBuffer, lParams);
+    String lActual = lBuffer.toString();
     assertEquals("JSON document generated from " + mDocName + " and " + mSchemaName,
                  lExpected,
                  lActual);

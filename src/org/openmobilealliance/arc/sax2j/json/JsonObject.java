@@ -5,6 +5,10 @@ package org.openmobilealliance.arc.sax2j.json;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * A JS object (map). This JS object, unlike many other implementations,
+ * maintains the order of keys added to it.
+ */
 public class JsonObject implements JsonValue
 {
   private LinkedHashMap<String, JsonValue> mValues =
@@ -22,8 +26,47 @@ public class JsonObject implements JsonValue
 
   public JsonObject put(String xiKey, JsonValue xiValue)
   {
-    mValues.put(xiKey, xiValue);
+    return put(xiKey, xiValue, false);
+  }
+
+  /**
+   * Add a new value to the map.
+   * @param xiKey
+   * @param xiValue
+   * @param xiCombine if there's a non-array value here already, turn it into
+   * an array and add the new value on the end?
+   * @return (fluid interface)
+   */
+  public JsonObject put(String xiKey, JsonValue xiValue, boolean xiCombine)
+  {
+    JsonValue lValue = mValues.get(xiKey);
+
+    if (lValue == null)
+    {
+      mValues.put(xiKey, xiValue);
+    }
+    else
+    {
+      if (lValue instanceof JsonArray)
+      {
+        ((JsonArray)lValue).add(xiValue);
+      }
+      else if (xiCombine)
+      {
+        JsonArray lArray = JsonArray.create().add(lValue).add(xiValue);
+        mValues.put(xiKey, lArray);
+      }
+      else
+      {
+        throw new RuntimeException("Attempted to add second value for " + xiKey);
+      }
+    }
     return this;
+  }
+
+  public boolean containsKey(String xiKey)
+  {
+    return mValues.containsKey(xiKey);
   }
 
   @Override

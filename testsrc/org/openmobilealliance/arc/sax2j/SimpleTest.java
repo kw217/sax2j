@@ -24,8 +24,6 @@ public class SimpleTest
     lDoc.setProgressWriter(lProgress);
     lDoc.parse();
 
-    lDoc.walk();
-
   }
 
 }
