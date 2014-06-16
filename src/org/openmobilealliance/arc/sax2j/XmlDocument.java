@@ -20,6 +20,7 @@ import org.apache.xerces.xs.XSParticle;
 import org.apache.xerces.xs.XSTerm;
 import org.openmobilealliance.arc.sax2j.json.JsonArray;
 import org.openmobilealliance.arc.sax2j.json.JsonNull;
+import org.openmobilealliance.arc.sax2j.json.JsonNumber;
 import org.openmobilealliance.arc.sax2j.json.JsonObject;
 import org.openmobilealliance.arc.sax2j.json.JsonString;
 import org.openmobilealliance.arc.sax2j.json.JsonValue;
@@ -127,7 +128,7 @@ public class XmlDocument
    */
   private static void toJson(TranslationMode xiMode, JsonObject xoObject, Element xiElement)
   {
-    String lKey = xiElement.getNodeName();
+    String lKey = xiElement.getLocalName();
     JsonValue lValue = toJsonValue(xiMode, xiElement);
     put(xiMode, xoObject, xiElement, lKey, lValue);
   }
@@ -143,18 +144,27 @@ public class XmlDocument
   {
     JsonValue lret;
 
-    if (hasNoInterestingChildren(xiElement))
+    if (xiElement.getFirstChild() == null)
     {
-      // TODO: respect schema?
+      // TODO: Respect schema?
+      lret = JsonNull.create();
+    }
+    else if (hasNoInterestingChildren(xiElement))
+    {
       String lValue = xiElement.getTextContent();
 
-      if (lValue == null)
+      // TODO: switch on translation mode here?
+      ElementPSVI lPsvi = (ElementPSVI)xiElement;
+      XSElementDeclaration lDecl = lPsvi.getElementDeclaration();
+
+      if (lDecl.getTypeDefinition().derivedFrom("http://www.w3.org/2001/XMLSchema", "decimal", (short)-1) ||
+          lDecl.getTypeDefinition().derivedFrom("http://www.w3.org/2001/XMLSchema", "float", (short)-1) ||
+          lDecl.getTypeDefinition().derivedFrom("http://www.w3.org/2001/XMLSchema", "double", (short)-1))
       {
-        lret = JsonNull.create();
+        lret = JsonNumber.create(lValue);
       }
       else
       {
-        // TODO: number or string
         lret = JsonString.create(lValue);
       }
     }
@@ -296,7 +306,6 @@ public class XmlDocument
       lmulti = lResult;
     }
 
-    System.out.println("Element " + xiElement.getNodeName() + ": multi? " + lmulti);
     return lmulti;
   }
 

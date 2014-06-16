@@ -34,6 +34,7 @@ public class JsonString implements JsonValue
   static void renderString(String xiValue, StringBuilder xiBuffer, RenderParams xiParams)
   {
     xiBuffer.append("\"");
+    // TODO: Prevent this from escaping ordinary slashes "/".
     xiBuffer.append(StringEscapeUtils.escapeJson(xiValue));
     xiBuffer.append("\"");
   }
