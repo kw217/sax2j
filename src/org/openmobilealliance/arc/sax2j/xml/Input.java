@@ -1,6 +1,6 @@
 // Input.java
 // (C) COPYRIGHT METASWITCH NETWORKS 2014
-package org.openmobilealliance.arc.sax2j;
+package org.openmobilealliance.arc.sax2j.xml;
 
 import java.io.InputStream;
 import java.io.Reader;

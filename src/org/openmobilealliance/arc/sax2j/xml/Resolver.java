@@ -1,6 +1,6 @@
 // Resolver.java
 // (C) COPYRIGHT METASWITCH NETWORKS 2014
-package org.openmobilealliance.arc.sax2j;
+package org.openmobilealliance.arc.sax2j.xml;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,6 +10,8 @@ import java.util.Map;
 
 import javax.xml.XMLConstants;
 
+import org.openmobilealliance.arc.sax2j.ProgressWriter;
+import org.openmobilealliance.arc.sax2j.ProgressWriter.NullProgressWriter;
 import org.w3c.dom.ls.LSInput;
 import org.w3c.dom.ls.LSResourceResolver;
 

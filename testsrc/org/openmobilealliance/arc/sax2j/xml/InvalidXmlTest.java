@@ -1,6 +1,6 @@
 // InvalidXmlTest.java
 // (C) COPYRIGHT METASWITCH NETWORKS 2014
-package org.openmobilealliance.arc.sax2j;
+package org.openmobilealliance.arc.sax2j.xml;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
@@ -14,6 +14,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+import org.openmobilealliance.arc.sax2j.xml.XmlDocument;
+import org.openmobilealliance.arc.sax2j.xml.XmlSchema;
 import org.xml.sax.SAXException;
 
 /**

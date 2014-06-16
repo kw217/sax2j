@@ -1,7 +1,9 @@
 // DefaultErrorHandler.java
 // (C) COPYRIGHT METASWITCH NETWORKS 2014
-package org.openmobilealliance.arc.sax2j;
+package org.openmobilealliance.arc.sax2j.xml;
 
+import org.openmobilealliance.arc.sax2j.ProgressWriter;
+import org.openmobilealliance.arc.sax2j.ProgressWriter.NullProgressWriter;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;

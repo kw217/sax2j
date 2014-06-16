@@ -1,14 +1,8 @@
-// XmlDocument.java
+// Translator.java
 // (C) COPYRIGHT METASWITCH NETWORKS 2014
-package org.openmobilealliance.arc.sax2j;
+package org.openmobilealliance.arc.sax2j.xml;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.regex.Pattern;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.xerces.xs.ElementPSVI;
 import org.apache.xerces.xs.XSComplexTypeDefinition;
@@ -24,100 +18,18 @@ import org.openmobilealliance.arc.sax2j.json.JsonNumber;
 import org.openmobilealliance.arc.sax2j.json.JsonObject;
 import org.openmobilealliance.arc.sax2j.json.JsonString;
 import org.openmobilealliance.arc.sax2j.json.JsonValue;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
 
-public class XmlDocument
+/**
+ * Translator from XML to JSON.
+ */
+public class Translator
 {
-  /**
-   * The progress writer we use.
-   */
-  private ProgressWriter mProgress = new ProgressWriter.NullProgressWriter();
-
-  /**
-   * The schema to parse with.
-   */
-  private final XmlSchema mSchema;
-
-  /**
-   * The file to parse.
-   */
-  private final File mDocFile;
-
-  /**
-   * The parsed DOM document.
-   */
-  private Document mDoc;
-
   /**
    * Regexp for whitespace-only text.
    */
   private static final Pattern WHITESPACE_TEXT = Pattern.compile("[ \t\n]*");
-
-  /**
-   * Construct an XML document. Use {@link #parse()} to parse it.
-   *
-   * @param xiSchema
-   * @param xiFile
-   */
-  public XmlDocument(XmlSchema xiSchema, File xiFile)
-  {
-    mSchema = xiSchema;
-    mDocFile = xiFile;
-  }
-
-  public void setProgressWriter(ProgressWriter xiProgress)
-  {
-    mProgress = xiProgress;
-  }
-
-  /**
-   * Parse the given XML document using the given schema.
-   *
-   * @throws ParserConfigurationException
-   * @throws SAXException
-   * @throws IOException
-   */
-  public void parse()
-      throws ParserConfigurationException, SAXException, IOException
-  {
-    if (mDoc != null)
-    {
-      throw new RuntimeException("Already parsed");
-    }
-
-    // Get a parser.
-    DocumentBuilderFactory lFactory = mSchema.getDocumentBuilderFactory();
-    DocumentBuilder lBuilder = lFactory.newDocumentBuilder();
-    ThrowingErrorHandler lErrors = new ThrowingErrorHandler();
-    lErrors.setProgressWriter(mProgress);
-    lBuilder.setErrorHandler(lErrors);
-
-    // Parse.
-    mDoc = lBuilder.parse(mDocFile);
-
-    // Check we're all hunky-dory.
-    if (!mDoc.getDocumentElement().isSupported("psvi", "1.0"))
-    {
-      throw new RuntimeException("PSVI not supported by document");
-    }
-  }
-
-  /**
-   * Convert to JSON following the rules of
-   * OMA-TS-REST_NetAPI_Common-V1_0-20140604-D.doc.
-   *
-   * @param xiMode the translation mode to use
-   * @return the JSON object.
-   */
-  public JsonValue toJson(TranslationMode xiMode)
-  {
-    JsonObject lObject = JsonObject.create();
-    toJson(xiMode, lObject, mDoc.getDocumentElement());
-    return lObject;
-  }
 
   /**
    * Add the given element (as a name/value pair) to the given object.
@@ -126,7 +38,9 @@ public class XmlDocument
    * @param xoObject
    * @param xiElement
    */
-  private static void toJson(TranslationMode xiMode, JsonObject xoObject, Element xiElement)
+  public static void toJson(TranslationMode xiMode,
+                            JsonObject xoObject,
+                            Element xiElement)
   {
     String lKey = xiElement.getLocalName();
     JsonValue lValue = toJsonValue(xiMode, xiElement);
@@ -140,7 +54,7 @@ public class XmlDocument
    * @param xiElement
    * @return
    */
-  private static JsonValue toJsonValue(TranslationMode xiMode, Element xiElement)
+  public static JsonValue toJsonValue(TranslationMode xiMode, Element xiElement)
   {
     JsonValue lret;
 
@@ -431,7 +345,6 @@ public class XmlDocument
     {
       return (this == STRUCTURE_AWARE);
     }
-
   }
 
 }

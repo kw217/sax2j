@@ -1,12 +1,14 @@
 // ParseSanityTest.java
 // (C) COPYRIGHT METASWITCH NETWORKS 2014
-package org.openmobilealliance.arc.sax2j;
+package org.openmobilealliance.arc.sax2j.xml;
 
 import static org.junit.Assert.fail;
 
 import java.io.File;
 
 import org.junit.Test;
+import org.openmobilealliance.arc.sax2j.xml.XmlDocument;
+import org.openmobilealliance.arc.sax2j.xml.XmlSchema;
 
 /**
  * Check that we don't allow foolish behaviour.

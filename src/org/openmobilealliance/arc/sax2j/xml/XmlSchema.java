@@ -2,7 +2,7 @@
 // (C) COPYRIGHT METASWITCH NETWORKS 2014
 // TODO: Decide on correct copyright banner.
 // TODO: Decide on correct package name.
-package org.openmobilealliance.arc.sax2j;
+package org.openmobilealliance.arc.sax2j.xml;
 
 import java.io.File;
 
@@ -14,6 +14,8 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.apache.xerces.jaxp.DocumentBuilderFactoryImpl;
+import org.openmobilealliance.arc.sax2j.ProgressWriter;
+import org.openmobilealliance.arc.sax2j.ProgressWriter.NullProgressWriter;
 import org.xml.sax.SAXException;
 
 /**

@@ -1,10 +1,14 @@
 // SimpleTest.java
 // (C) COPYRIGHT METASWITCH NETWORKS 2014
-package org.openmobilealliance.arc.sax2j;
+package org.openmobilealliance.arc.sax2j.xml;
 
 import java.io.File;
 
 import org.junit.Test;
+import org.openmobilealliance.arc.sax2j.ConsoleProgressWriter;
+import org.openmobilealliance.arc.sax2j.ProgressWriter;
+import org.openmobilealliance.arc.sax2j.xml.XmlDocument;
+import org.openmobilealliance.arc.sax2j.xml.XmlSchema;
 
 public class SimpleTest
 {

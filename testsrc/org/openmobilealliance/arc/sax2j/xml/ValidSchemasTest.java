@@ -1,6 +1,6 @@
 // ValidSchemasTest.java
 // (C) COPYRIGHT METASWITCH NETWORKS 2014
-package org.openmobilealliance.arc.sax2j;
+package org.openmobilealliance.arc.sax2j.xml;
 
 import java.io.File;
 import java.util.Arrays;
@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+import org.openmobilealliance.arc.sax2j.xml.XmlSchema;
 
 /**
  * Check the parser accepts some valid schemas.
