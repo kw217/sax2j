@@ -14,8 +14,8 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.apache.xerces.jaxp.DocumentBuilderFactoryImpl;
+import org.apache.xerces.jaxp.validation.XSGrammarPoolContainer;
 import org.openmobilealliance.arc.sax2j.ProgressWriter;
-import org.openmobilealliance.arc.sax2j.ProgressWriter.NullProgressWriter;
 import org.xml.sax.SAXException;
 
 /**
@@ -119,7 +119,7 @@ public class XmlSchema
     // - otherwise the above schema doesn't make it all the way down the
     // stack. Sigh.
     lFactory.setAttribute("http://apache.org/xml/properties/internal/grammar-pool",
-                          mSchema);
+                          ((XSGrammarPoolContainer)mSchema).getGrammarPool());
 
     return lFactory;
   }
