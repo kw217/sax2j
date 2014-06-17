@@ -8,6 +8,6 @@ public class ConsoleProgressWriter implements ProgressWriter
   @Override
   public void log(String xiMessage)
   {
-    System.out.println(xiMessage);
+    System.err.println(xiMessage);
   }
 }

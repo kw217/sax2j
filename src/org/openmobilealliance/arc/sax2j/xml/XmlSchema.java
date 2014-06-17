@@ -83,7 +83,8 @@ public class XmlSchema
     String lSchemaLanguage = sUseXsd11 ? "http://www.w3.org/XML/XMLSchema/v1.1"
                                          : XMLConstants.W3C_XML_SCHEMA_NS_URI;
     SchemaFactory lFactory = SchemaFactory.newInstance(lSchemaLanguage);
-    mProgress.log("Using XML Schema " + (sUseXsd11 ? "1.1" : "1.0"));
+    mProgress.log("Using XML Schema " + (sUseXsd11 ? "1.1" : "1.0") +
+                  " to parse " + mSchemaFile);
     lFactory.setResourceResolver(mResolver);
     Source lSchemaSource = new StreamSource(mSchemaFile);
     mSchema = lFactory.newSchema(lSchemaSource);

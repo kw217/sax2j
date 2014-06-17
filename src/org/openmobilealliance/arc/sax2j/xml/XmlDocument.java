@@ -76,6 +76,7 @@ public class XmlDocument
     ThrowingErrorHandler lErrors = new ThrowingErrorHandler();
     lErrors.setProgressWriter(mProgress);
     lBuilder.setErrorHandler(lErrors);
+    mProgress.log("Parsing " + mDocFile);
 
     // Parse.
     mDoc = lBuilder.parse(mDocFile);
@@ -85,6 +86,8 @@ public class XmlDocument
     {
       throw new RuntimeException("PSVI not supported by document");
     }
+
+    mProgress.log("Successfully parsed " + mDocFile);
   }
 
   /**
@@ -96,8 +99,10 @@ public class XmlDocument
    */
   public JsonValue toJson(TranslationMode xiMode)
   {
+    mProgress.log("Translating " + mDocFile + " to " + xiMode + " JSON");
     JsonObject lObject = JsonObject.create();
     Translator.toJson(xiMode, lObject, mDoc.getDocumentElement());
+    mProgress.log("Successfully translated " + mDocFile);
     return lObject;
   }
 }
