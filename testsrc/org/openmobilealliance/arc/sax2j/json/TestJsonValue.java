@@ -21,7 +21,16 @@ public class TestJsonValue
              .add(JsonObject.create()
                   .put("nested", JsonString.create("tahi"))
                   .put("also", JsonNumber.create("2"))
-                  .put("empty", JsonObject.create())));
+                  .put("empty", JsonObject.create())))
+        .put("foxtrot", JsonArray.create()
+             .add(JsonObject.create()
+                  .put("a", JsonNumber.create("1"))
+                  .put("b", JsonNumber.create("2"))))
+        .put("golf", JsonArray.create()
+             .add(JsonObject.create()
+                  .put("say", JsonString.create("geronimo!"))))
+        .put("hotel", JsonArray.create()
+             .add(JsonString.create("geronimo!")));
 
   @Test
   public void testSimpleCompact()
@@ -32,7 +41,9 @@ public class TestJsonValue
     String lCompact = "{\"charlie\": 52, \"alpha\": [\"Hello\", \"World\", " +
         "\"\\\"\\\\/\\b\\f\\n\\r\\t'<>&\\u0000\\u4EAC\\u90FD\"], " +
         "\"bravo\": null, \"delta\": [], \"echo\": [{\"nested\": \"tahi\", " +
-        "\"also\": 2, \"empty\": {}}]}";
+        "\"also\": 2, \"empty\": {}}], \"foxtrot\": [{\"a\": 1, \"b\": 2}], " +
+        "\"golf\": [{\"say\": \"geronimo!\"}], \"hotel\": [\"geronimo!\"]}";
+
     assertEquals(lCompact, lBuilder.toString());
   }
 
@@ -56,7 +67,14 @@ public class TestJsonValue
         "      \"also\": 2,\n" +
         "      \"empty\": {}\n" +
         "    }\n" +
-        "  ]\n" +
+        "  ],\n" +
+        "  \"foxtrot\": [\n" +
+        "    { \"a\": 1,\n" +
+        "      \"b\": 2\n" +
+        "    }\n" +
+        "  ],\n" +
+        "  \"golf\": [ { \"say\": \"geronimo!\" } ],\n" +
+        "  \"hotel\": [ \"geronimo!\" ]\n" +
         "}";
     assertEquals(lPretty, lBuilder.toString());
   }

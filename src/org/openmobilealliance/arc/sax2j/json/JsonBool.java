@@ -25,4 +25,10 @@ public class JsonBool implements JsonValue
   {
     xiBuffer.append(mValue ? "true" : "false");
   }
+
+  @Override
+  public boolean isSimple()
+  {
+    return true;
+  }
 }

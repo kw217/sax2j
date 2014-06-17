@@ -57,4 +57,10 @@ public class JsonString implements JsonValue
     xiBuffer.append(ALT_ESCAPE_JSON.translate(xiValue));
     xiBuffer.append("\"");
   }
+
+  @Override
+  public boolean isSimple()
+  {
+    return true;
+  }
 }

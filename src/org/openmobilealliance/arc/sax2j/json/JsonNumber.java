@@ -26,4 +26,10 @@ public class JsonNumber implements JsonValue
   {
     xiBuffer.append(mValue);
   }
+
+  @Override
+  public boolean isSimple()
+  {
+    return true;
+  }
 }

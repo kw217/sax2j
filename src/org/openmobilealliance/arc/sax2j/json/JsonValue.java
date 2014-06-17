@@ -8,4 +8,5 @@ package org.openmobilealliance.arc.sax2j.json;
 public interface JsonValue
 {
   public void render(StringBuilder xiBuffer, RenderParams xiParams);
+  boolean isSimple();
 }

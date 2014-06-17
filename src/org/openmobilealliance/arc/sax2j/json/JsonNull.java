@@ -21,4 +21,10 @@ public class JsonNull implements JsonValue
   {
     xiBuffer.append("null");
   }
+
+  @Override
+  public boolean isSimple()
+  {
+    return true;
+  }
 }

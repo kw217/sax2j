@@ -68,7 +68,7 @@ public class RenderParams
    */
   public static RenderParams createPretty()
   {
-    return new RenderParams("  ", true, " ", " ", "", "");
+    return new RenderParams("  ", true, " ", " ", "", " ");
   }
 
   /**

@@ -38,7 +38,7 @@ public class JsonArray implements JsonValue
       if (lFirst)
       {
         lFirst = false;
-        if (xiOuter.mDirtyLine)
+        if (xiOuter.mDirtyLine && !isSimple())
         {
           lInner.doIndent(xiBuffer);
         }
@@ -56,12 +56,26 @@ public class JsonArray implements JsonValue
       lValue.render(xiBuffer, lInner);
     }
 
-    if (mValues.size() > 0)
+    if (mValues.size() == 0)
+    {
+      // do nothing
+    }
+    else if (isSimple())
+    {
+      xiBuffer.append(xiOuter.mLastSpacing);
+    }
+    else
     {
       xiOuter.doIndent(xiBuffer);
-      xiBuffer.append(xiOuter.mLastSpacing);
     }
 
     xiBuffer.append("]");
+  }
+
+  @Override
+  public boolean isSimple()
+  {
+    return (mValues.isEmpty() ||
+            ((mValues.size() == 1) && mValues.get(0).isSimple()));
   }
 }
