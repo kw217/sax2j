@@ -4,6 +4,7 @@ package org.openmobilealliance.arc.sax2j.xml;
 
 import java.util.regex.Pattern;
 
+import org.apache.xerces.impl.xs.XSComplexTypeDecl;
 import org.apache.xerces.xs.ElementPSVI;
 import org.apache.xerces.xs.XSComplexTypeDefinition;
 import org.apache.xerces.xs.XSElementDeclaration;
@@ -12,6 +13,7 @@ import org.apache.xerces.xs.XSObject;
 import org.apache.xerces.xs.XSObjectList;
 import org.apache.xerces.xs.XSParticle;
 import org.apache.xerces.xs.XSTerm;
+import org.apache.xerces.xs.XSTypeDefinition;
 import org.openmobilealliance.arc.sax2j.json.JsonArray;
 import org.openmobilealliance.arc.sax2j.json.JsonNull;
 import org.openmobilealliance.arc.sax2j.json.JsonNumber;
@@ -58,19 +60,55 @@ public class Translator
   {
     JsonValue lret;
 
+    ElementPSVI lPsvi = (ElementPSVI)xiElement;
+    XSElementDeclaration lDecl = lPsvi.getElementDeclaration();
+
     if (xiElement.getFirstChild() == null)
     {
-      // TODO: Respect schema?
+      // By default this means the value is null, but if the schema says
+      // there's a single multivalued attribute underneath, we have a
+      // 0-element array instead.
+
       lret = JsonNull.create();
+
+      XSTypeDefinition lType = lDecl.getTypeDefinition();
+
+      if (lType instanceof XSComplexTypeDecl)
+      {
+        XSParticle lParticle = ((XSComplexTypeDecl)lType).getParticle();
+
+        if (lParticle != null)
+        {
+          XSTerm lTerm = lParticle.getTerm();
+
+          if (lTerm instanceof XSModelGroup)
+          {
+            XSModelGroup lGroup = (XSModelGroup)lTerm;
+            XSObjectList lParticles = ((XSModelGroup)lTerm).getParticles();
+
+            if (lParticles.getLength() == 1)
+            {
+              XSParticle lSubParticle = (XSParticle)lParticles.get(0);
+              XSTerm lSubTerm = lSubParticle.getTerm();
+
+              if ((lSubParticle.getMaxOccursUnbounded() ||
+                   (lSubParticle.getMaxOccurs() > 1)) &&
+                  (lSubTerm instanceof XSElementDeclaration))
+              {
+                XSElementDeclaration lSubDecl = (XSElementDeclaration)lSubTerm;
+                lret = JsonObject.create().put(lSubDecl.getName(),
+                                               JsonArray.create());
+              }
+            }
+          }
+        }
+      }
     }
     else if (hasNoInterestingChildren(xiElement))
     {
       String lValue = xiElement.getTextContent();
 
       // TODO: switch on translation mode here?
-      ElementPSVI lPsvi = (ElementPSVI)xiElement;
-      XSElementDeclaration lDecl = lPsvi.getElementDeclaration();
-
       if (lDecl.getTypeDefinition().derivedFrom("http://www.w3.org/2001/XMLSchema", "decimal", (short)-1) ||
           lDecl.getTypeDefinition().derivedFrom("http://www.w3.org/2001/XMLSchema", "float", (short)-1) ||
           lDecl.getTypeDefinition().derivedFrom("http://www.w3.org/2001/XMLSchema", "double", (short)-1))
@@ -194,13 +232,24 @@ public class Translator
    */
   private static boolean isElementMultiValued(Element xiElement)
   {
-    boolean lmulti;
-
     // See http://xerces.apache.org/xerces2-j/faq-xs.html#faq-7
     ElementPSVI lPsvi = (ElementPSVI)xiElement;
     XSElementDeclaration lDecl = lPsvi.getElementDeclaration();
 
-    XSComplexTypeDefinition lComplex = lDecl.getEnclosingCTDefinition();
+    return isElementMultiValued(lDecl);
+  }
+
+  /**
+   * Is it possible for this element to occur more than once within its
+   * enclosing type?
+   * @param xiElement
+   * @return
+   */
+  private static boolean isElementMultiValued(XSElementDeclaration xiDecl)
+  {
+    boolean lmulti;
+
+    XSComplexTypeDefinition lComplex = xiDecl.getEnclosingCTDefinition();
 
     if (lComplex == null)
     {
@@ -210,11 +259,11 @@ public class Translator
     {
       XSParticle lTopParticle = lComplex.getParticle();
 
-      Boolean lResult = isElementMultiWithin(lDecl, false, lTopParticle);
+      Boolean lResult = isElementMultiWithin(xiDecl, false, lTopParticle);
 
       if (lResult == null)
       {
-        throw new RuntimeException("Couldn't find declaration of " + lDecl.getName() + " within " + lComplex.getName());
+        throw new RuntimeException("Couldn't find declaration of " + xiDecl.getName() + " within " + lComplex.getName());
       }
 
       lmulti = lResult;
