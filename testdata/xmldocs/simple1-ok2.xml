@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nms:nmsEventList xmlns:nms="http://www.example.org/sax2j/test/simple1">
+  <nmsEvent>
+    <changedObject>
+      <parentFolder>http://www.example.org/parent</parentFolder>
+      <attributes></attributes>
+      <flags><flag>\Seen</flag><flag>\Flagged</flag></flags>
+      <resourceURL>http://www.example.org/this</resourceURL>
+      <lastModSeq>0</lastModSeq>
+    </changedObject>
+  </nmsEvent>
+  <nmsEvent>
+    <resetBox/>
+  </nmsEvent>
+  <callbackData>This is some data</callbackData>
+  <index>42</index>
+  <restartToken>from this very instant</restartToken>
+</nms:nmsEventList>
+

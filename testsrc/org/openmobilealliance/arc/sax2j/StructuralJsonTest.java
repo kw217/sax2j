@@ -35,6 +35,7 @@ public class StructuralJsonTest
     return Arrays.asList(new Object[][]
     {
      { "simple1.xsd", "simple1-ok.xml", "simple1-ok.json" },
+     { "simple1.xsd", "simple1-ok2.xml", "simple1-ok2.json" },
     });
   }
 
