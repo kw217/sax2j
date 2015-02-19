@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   XML data type definitions for the RESTful Network API for Network Message Storage (NMS)  
+   Version: 1.0 (1.0)
+   Date: 19 June 2014
+   
+   FILE INFORMATION 
+   
+      OMA Permanent Document 
+         File: OMA-SUP-XSD_rest_netapi_nms-V1_0-20140619-D
+         Type: Text - Schema Description 
+   
+   Public Reachable Information 
+      Path: http://www.openmobilealliance.org/tech/profiles 
+      Name: rest_netapi_nms-v1_0.xsd 
+   
+   NORMATIVE INFORMATION
+   
+   Information about this file can be found in the latest revision of the specification
+ 
+       OMA-TS-REST_NetAPI_NMS-V1_0 
+       
+       This is available at http://www.openmobilealliance.org/
+   
+      Send comments to technical-comments@mail.openmobilealliance.org
+   
+   CHANGE HISTORY 
+   20131029 File created, see OMA-ARC-REST-NMS-2013-0052-INP_XSD_baseline
+   20131124 Added data types according to OMA-ARC-REST-NMS-2013-0060R02-CR_data_types_XSD
+   20131209 CR OMA-ARC-REST-NMS-2013-0082-CR_xsd_alignment_with_TS implemented
+   20140115 CR OMA-ARC-REST-NMS-2014-0002R02-CR_xsd_alignment_with_TS implemented
+   20140129 CR OMA-ARC-REST-NMS-2014-0013R01-CR_XSD_fix implemented
+   20140210 CR OMA-ARC-REST-NMS-2014-0030-CR_xsd_alignment_with_TS implemented
+   20140318 CR OMA-ARC-REST-NMS-2014-0035-CR_xsd_alignment_with_TS implemented
+   20140412 CR OMA-ARC-REST-NMS-2014-0052R01-CR_xsd_alignment_with_TS implemented
+   20140429 CR OMA-ARC-REST-NMS-2014-0059-CR_xsd_alignment_with_TS implemented
+   20140527 CR OMA-ARC-REST-NMS-2014-0106-CR_xsd_alignment_with_TS implemented
+   20140619 CR OMA-ARC-REST-NMS-2014-0122-CR_xsd_alignment_with_TS implemented
+               OMA-ARC-REST-NMS-2014-0128R01-CR_xsd_alignment_with_TS implemented
+
+
+   LEGAL DISCLAIMER
+   
+   Use of this document is subject to all of the terms and conditions
+   of the Use Agreement located at
+   http://www.openmobilealliance.org/UseAgreement.html,
+   provided, however, that section (d) under "Documents - Terms 
+   of Use" which states, "no modifications are made to such 
+   Documents" does not apply to your use.
+   
+   The Open Mobile Alliance authorizes you to copy this document, 
+   provided that you retain all copyright and other proprietary  
+   notices contained in the original materials on any copies of the 
+   materials and  that you comply strictly with these terms. This 
+   copyright permission does not constitute an endorsement of the 
+   products or services. The Open Mobile Alliance assumes no 
+   responsibility for errors or omissions in this document.
+   
+   Each Open Mobile Alliance member has agreed to use reasonable
+   endeavors to inform the Open Mobile Alliance in a timely manner of
+   Essential IPR as it becomes aware that the Essential IPR is related
+   to the prepared or published specification.  However, the members
+   do not have an obligation to conduct IPR searches.  The declared
+   Essential IPR is publicly available to members and non-members of
+   the Open Mobile Alliance and may be found on the "OMA IPR
+   Declarations" list at http://www.openmobilealliance.org/ipr.html.
+   The Open Mobile Alliance has not conducted an independent IPR review
+   of this document and the information contained herein, and makes no
+   representations or warranties regarding third party IPR, including
+   without limitation patents, copyrights or trade secret rights.  This
+   document may contain inventions for which you must obtain licenses
+   from third parties before making, using or selling the inventions.
+   Defined terms above are set forth in the schedule to the Open Mobile
+   Alliance Application Form.
+   
+   NO REPRESENTATIONS OR WARRANTIES (WHETHER EXPRESS OR IMPLIED) ARE
+   MADE BY THE OPEN MOBILE ALLIANCE OR ANY OPEN MOBILE ALLIANCE MEMBER
+   OR ITS AFFILIATES REGARDING ANY OF THE IPR'S REPRESENTED ON THE "OMA
+   IPR DECLARATIONS" LIST, INCLUDING, BUT NOT LIMITED TO THE ACCURACY,
+   COMPLETENESS, VALIDITY OR RELEVANCE OF THE INFORMATION OR WHETHER OR
+   NOT SUCH RIGHTS ARE ESSENTIAL OR NON-ESSENTIAL.
+   
+   THE OPEN MOBILE ALLIANCE IS NOT LIABLE FOR AND HEREBY DISCLAIMS ANY
+   DIRECT, INDIRECT, PUNITIVE, SPECIAL, INCIDENTAL, CONSEQUENTIAL, OR
+   EXEMPLARY DAMAGES ARISING OUT OF OR IN CONNECTION WITH THE USE OF
+   DOCUMENTS AND THE INFORMATION CONTAINED IN THE DOCUMENTS.
+   
+   Copyright 2013 Open Mobile Alliance Ltd.  All Rights Reserved.
+   Used with the permission of the Open Mobile Alliance Ltd. under the
+   terms set forth above.   
+-->
+
+
+
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+   targetNamespace="urn:oma:xml:rest:netapi:nms:1"
+   xmlns:common="urn:oma:xml:rest:netapi:common:1"
+   xmlns="urn:oma:xml:rest:netapi:nms:1" version="1.0">
+
+   <xsd:annotation>
+      <xsd:documentation>This schema defines the XML data types for the RESTful Network API for Network Message Storage.</xsd:documentation>
+   </xsd:annotation>
+
+   <xsd:import namespace="urn:oma:xml:rest:netapi:common:1"
+	schemaLocation="http://www.openmobilealliance.org/tech/profiles/rest_netapi_common-v1_0.xsd" />
+
+	<!-- ============================================ -->
+	<!--    Object & Folder Data type definitions     -->
+	<!-- ============================================ -->
+
+
+   <xsd:element name="objectList" type="ObjectList" />
+
+   <xsd:complexType name="ObjectList">
+      <xsd:sequence>
+         <xsd:element name="object" type="Object" maxOccurs="unbounded" minOccurs="0" />
+         <xsd:element name="cursor" type="xsd:string" maxOccurs="1" minOccurs="0" />
+         <xsd:element name="creationCursor" type="xsd:string" maxOccurs="1" minOccurs="0" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+
+   <xsd:element name="object" type="Object" />
+
+   <xsd:complexType name="Object">
+      <xsd:sequence>
+      	<xsd:choice maxOccurs="1" minOccurs="0">
+      		<xsd:element name="parentFolder" type="xsd:anyURI" maxOccurs="1" minOccurs="1" />
+      		<xsd:element name="parentFolderPath" type="xsd:string" maxOccurs="1" minOccurs="1" />
+      	</xsd:choice>
+      	<xsd:element name="attributes" type="AttributeList" maxOccurs="1" minOccurs="1" />
+      	<xsd:element name="flags" type="FlagList" maxOccurs="1" minOccurs="1" />
+      	<xsd:element name="resourceURL" type="xsd:anyURI" maxOccurs="1" minOccurs="0" />
+      	<xsd:element name="path" type="xsd:string" maxOccurs="1" minOccurs="0" />
+	<xsd:element name="payloadURL" type="xsd:anyURI" maxOccurs="1" minOccurs="0" />
+      	<xsd:element name="payloadPart" type="PayloadPartInfo" maxOccurs="unbounded" minOccurs="0" />
+      	<xsd:element name="lastModSeq" type="xsd:unsignedLong" maxOccurs="1" minOccurs="0" />
+      	<xsd:element name="correlationId" type="xsd:string" maxOccurs="1" minOccurs="0" />
+      	<xsd:element name="correlationTag" type="xsd:string" maxOccurs="1" minOccurs="0" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+
+   <xsd:complexType name="AttributeList">
+      <xsd:sequence>
+         <xsd:element name="attribute" type="Attribute" maxOccurs="unbounded" minOccurs="0" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:complexType name="Attribute">
+      <xsd:sequence>
+         <xsd:element name="name" type="xsd:string" maxOccurs="1" minOccurs="1" />
+         <xsd:element name="value" type="xsd:string" maxOccurs="unbounded" minOccurs="0" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+ 
+  <xsd:element name="flagList" type="FlagList"/>
+
+  <xsd:complexType name="FlagList">
+     <xsd:sequence>
+        <xsd:element name="flag" type="Flag" maxOccurs="unbounded" minOccurs="0" />
+        <xsd:element name="resourceURL" type="xsd:anyURI" maxOccurs="1" minOccurs="0" />
+     </xsd:sequence>
+   </xsd:complexType>
+
+
+   <xsd:element name="flag" type="Flag"/>
+
+   <xsd:simpleType name="Flag">
+      <xsd:restriction base="xsd:string"></xsd:restriction>
+   </xsd:simpleType>
+
+
+   <xsd:complexType name="PayloadPartInfo">
+      <xsd:sequence>
+         <xsd:element name="contentType" type="xsd:string" maxOccurs="1" minOccurs="1" />
+         <xsd:element name="contentId" type="xsd:string" maxOccurs="1" minOccurs="0" />
+         <xsd:element name="contentLocation" type="xsd:anyURI" maxOccurs="1" minOccurs="0" />
+         <xsd:element name="size" type="xsd:unsignedLong" maxOccurs="1" minOccurs="0" />
+         <xsd:element name="href" type="xsd:anyURI" maxOccurs="1" minOccurs="1" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+
+   <xsd:element name="folderList" type="FolderList" />
+
+      <xsd:complexType name="FolderList">
+         <xsd:sequence>
+            <xsd:element name="folder" type="Folder" maxOccurs="unbounded" minOccurs="0" />
+            <xsd:element name="cursor" type="xsd:string" maxOccurs="1" minOccurs="0" />
+         </xsd:sequence>
+   </xsd:complexType>
+
+
+   <xsd:element name="folder" type="Folder" />
+
+   <xsd:complexType name="Folder">
+      <xsd:sequence>
+         <xsd:choice maxOccurs="1" minOccurs="0">
+            <xsd:element name="parentFolder" type="xsd:anyURI" maxOccurs="1" minOccurs="1" />
+            <xsd:element name="parentFolderPath" type="xsd:string" maxOccurs="1" minOccurs="1" />
+         </xsd:choice>
+         <xsd:element name="attributes" type="AttributeList" maxOccurs="1" minOccurs="1" />
+         <xsd:element name="resourceURL" type="xsd:anyURI" maxOccurs="1" minOccurs="0" />
+         <xsd:element name="path" type="xsd:string" maxOccurs="1" minOccurs="0" />
+         <xsd:element name="name" type="xsd:string" maxOccurs="1" minOccurs="0" />
+         <xsd:element name="lastModSeq" type="xsd:unsignedLong" maxOccurs="1" minOccurs="0" />
+         <xsd:element name="cursor" type="xsd:string" maxOccurs="1" minOccurs="0" />
+         <xsd:element name="subFolders" type="FolderReferenceList" maxOccurs="1" minOccurs="0" />
+         <xsd:element name="objects" type="ObjectReferenceList" maxOccurs="1" minOccurs="0" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+
+   <xsd:element name="folderReferenceList" type="FolderReferenceList" />
+
+   <xsd:complexType name="FolderReferenceList">
+      <xsd:sequence>
+         <xsd:element name="folderReference" type="Reference" maxOccurs="unbounded" minOccurs="0" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+
+
+   <xsd:element name="objectReferenceList" type="ObjectReferenceList" />
+
+   <xsd:complexType name="ObjectReferenceList">
+      <xsd:sequence>
+         <xsd:element name="objectReference" type="Reference" maxOccurs="unbounded" minOccurs="0" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+
+   <xsd:element name="reference" type="Reference" />
+
+   <xsd:complexType name="Reference">
+      <xsd:sequence>
+         <xsd:element name="resourceURL" type="xsd:anyURI" maxOccurs="1" minOccurs="1" />
+         <xsd:element name="path" type="xsd:string" maxOccurs="1" minOccurs="0" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+
+   <xsd:complexType name="ReferenceList">
+      <xsd:sequence>
+         <xsd:element name="folders" type="FolderReferenceList" maxOccurs="1" minOccurs="1" />
+         <xsd:element name="objects" type="ObjectReferenceList" maxOccurs="1" minOccurs="1" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+
+   <xsd:element name="targetSourceRef" type="TargetSourceRef" />
+
+   <xsd:complexType name="TargetSourceRef">
+      <xsd:sequence>
+         <xsd:element name="targetRef" type="Reference" maxOccurs="1" minOccurs="1" />
+         <xsd:element name="sourceRefs" type="ReferenceList" maxOccurs="1" minOccurs="1" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:element name="pathList" type="PathList"/>
+    
+   <xsd:complexType name="PathList">
+      <xsd:sequence>
+         <xsd:element name="path" type="xsd:string" maxOccurs="unbounded" minOccurs="1"/>
+      </xsd:sequence>
+   </xsd:complexType>
+
+
+   <xsd:element name="bulkResponseList" type="BulkResponseList" />
+
+   <xsd:complexType name="BulkResponseList">
+      <xsd:sequence>
+   	 <xsd:element name="response" type="Response" maxOccurs="unbounded" minOccurs="1" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:complexType name="Response">
+     <xsd:sequence>
+   	<xsd:element name="code" type="xsd:unsignedShort" maxOccurs="1" minOccurs="1" />
+   	<xsd:element name="reason" type="xsd:string" maxOccurs="1" minOccurs="1" />
+      <xsd:choice>
+        <xsd:element name="success" type="Reference" />
+      	<xsd:element name="failure" type="common:RequestError" />
+      </xsd:choice>
+     </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:element name="empty" type="Empty"/>
+
+   <!-- An empty (dummy) complex type -->
+   <xsd:complexType name="Empty"/>
+
+
+	<!-- ==================================== -->
+	<!--      Search Data type definitions    -->
+	<!-- ==================================== -->
+
+
+   <xsd:element name="selectionCriteria" type="SelectionCriteria" />
+
+   <xsd:complexType name="SelectionCriteria">
+      <xsd:sequence>
+      	 <xsd:element name="fromCursor" type="xsd:string" maxOccurs="1" minOccurs="0" />
+      	 <xsd:element name="maxEntries" type="xsd:unsignedInt" maxOccurs="1" minOccurs="1" />
+      	 <xsd:element name="searchCriteria" type="SearchCriteria" maxOccurs="1" minOccurs="0" />
+      	 <xsd:element name="searchScope" type="Reference" maxOccurs="1" minOccurs="0" />
+      	 <xsd:element name="sortCriterion" type="SortCriterion" maxOccurs="1" minOccurs="0" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:complexType name="SearchCriteria">
+      <xsd:sequence>
+         <xsd:element name="criterion" type="SearchCriterion" maxOccurs="unbounded" minOccurs="1" />
+         <xsd:element name="operator" type="LogicalOperatorEnum" maxOccurs="1" minOccurs="0" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:complexType name="SearchCriterion">
+      <xsd:sequence>
+         <xsd:element name="type" type="SearchTypeEnum" maxOccurs="1" minOccurs="1" />
+         <xsd:element name="name" type="xsd:string" maxOccurs="1" minOccurs="0" />
+         <xsd:element name="value" type="xsd:string" maxOccurs="1" minOccurs="1" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:complexType name="SortCriterion">
+      <xsd:sequence>
+         <xsd:element name="type" type="SortTypeEnum" maxOccurs="1" minOccurs="1" />
+         <xsd:element name="name" type="xsd:string" maxOccurs="1" minOccurs="0" />
+         <xsd:element name="order" type="SortOrderEnum" maxOccurs="1" minOccurs="0" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+
+	<!-- =================================================== -->
+	<!--  Subscription & Notification Data type definitions  -->
+	<!-- =================================================== -->
+
+
+   <xsd:element name="nmsSubscriptionList" type="NmsSubscriptionList" />
+
+   <xsd:complexType name="NmsSubscriptionList">
+      <xsd:sequence>
+   	 <xsd:element name="subscription" type="NmsSubscription" maxOccurs="unbounded" minOccurs="0" />
+   	 <xsd:element name="resourceURL" type="xsd:anyURI" maxOccurs="1" minOccurs="1"/>
+      </xsd:sequence>
+   </xsd:complexType>
+
+
+   <xsd:element name="nmsSubscription" type="NmsSubscription" />
+
+   <xsd:complexType name="NmsSubscription">
+      <xsd:sequence>
+      	 <xsd:element name="callbackReference" type="common:CallbackReference" maxOccurs="1" minOccurs="1" />
+      	 <xsd:element name="duration" type="xsd:unsignedInt" maxOccurs="1" minOccurs="0" />
+      	 <xsd:element name="filter" type="SearchCriteria" maxOccurs="1" minOccurs="0" />
+      	 <xsd:element name="clientCorrelator" type="xsd:string" maxOccurs="1" minOccurs="0" />
+      	 <xsd:element name="resourceURL" type="xsd:anyURI" maxOccurs="1" minOccurs="0" />
+      	 <xsd:element name="index" type="xsd:unsignedLong" maxOccurs="1" minOccurs="0" />
+      	 <xsd:element name="restartToken" type="xsd:string" maxOccurs="1" minOccurs="0" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+
+   <xsd:element name="nmsEventList" type="NmsEventList" />
+    
+   <xsd:complexType name="NmsEventList">
+      <xsd:sequence>
+      	 <xsd:element name="nmsEvent" type="NmsEvent" maxOccurs="unbounded" minOccurs="0" />
+      	 <xsd:element name="callbackData" type="xsd:string" maxOccurs="1" minOccurs="0" />
+      	 <xsd:element name="index" type="xsd:unsignedLong" maxOccurs="1" minOccurs="0" />
+      	 <xsd:element name="restartToken" type="xsd:string" maxOccurs="1" minOccurs="0" />
+         <xsd:element name="link" type="common:Link" maxOccurs="unbounded" minOccurs="0" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:complexType name="NmsEvent">
+     <xsd:sequence>
+     	<xsd:choice maxOccurs="1" minOccurs="1">
+     	   <xsd:element name="deletedObject" type="DeletedObject" maxOccurs="1" minOccurs="1" />
+     	   <xsd:element name="deletedFolder" type="DeletedFolder" maxOccurs="1" minOccurs="1" />
+     	   <xsd:element name="expiredObject" type="DeletedObject" maxOccurs="1" minOccurs="1" />
+     	   <xsd:element name="expiredFolder" type="DeletedFolder" maxOccurs="1" minOccurs="1" />
+     	   <xsd:element name="changedObject" type="ChangedObject" maxOccurs="1" minOccurs="1" />
+     	   <xsd:element name="changedFolder" type="ChangedFolder" maxOccurs="1" minOccurs="1" />
+	   <xsd:element name="resetBox" type="ResetBox" maxOccurs="1" minOccurs="1" />
+     	</xsd:choice>
+     </xsd:sequence>
+   </xsd:complexType>
+
+
+   <xsd:element name="nmsSubscriptionUpdate" type="NmsSubscriptionUpdate" />
+
+   <xsd:complexType name="NmsSubscriptionUpdate">
+      <xsd:sequence>
+   	 <xsd:element name="duration" type="xsd:unsignedInt" maxOccurs="1" minOccurs="0" />
+   	 <xsd:element name="restartToken" type="xsd:string" maxOccurs="1" minOccurs="0" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+
+   <xsd:complexType name="DeletedObject">
+      <xsd:sequence>
+   	 <xsd:element name="resourceURL" type="xsd:anyURI" maxOccurs="1" minOccurs="1" />
+   	 <xsd:element name="lastModSeq" type="xsd:unsignedLong" maxOccurs="1" minOccurs="0" />
+   	 <xsd:element name="correlationId" type="xsd:string" maxOccurs="1" minOccurs="0" />
+   	 <xsd:element name="correlationTag" type="xsd:string" maxOccurs="1" minOccurs="0" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:complexType name="DeletedFolder">
+      <xsd:sequence>
+   	 <xsd:element name="resourceURL" type="xsd:anyURI" maxOccurs="1" minOccurs="1" />
+   	 <xsd:element name="lastModSeq" type="xsd:unsignedLong" maxOccurs="1" minOccurs="0" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:complexType name="ChangedObject">
+      <xsd:sequence>
+   	 <xsd:element name="parentFolder" type="xsd:anyURI" maxOccurs="1" minOccurs="1" />
+   	 <xsd:element name="flags" type="FlagList" maxOccurs="1" minOccurs="1" />
+   	 <xsd:element name="resourceURL" type="xsd:anyURI" maxOccurs="1" minOccurs="1" />
+   	 <xsd:element name="lastModSeq" type="xsd:unsignedLong" maxOccurs="1" minOccurs="0" />
+   	 <xsd:element name="correlationId" type="xsd:string" maxOccurs="1" minOccurs="0" />
+   	 <xsd:element name="correlationTag" type="xsd:string" maxOccurs="1" minOccurs="0" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:complexType name="ChangedFolder">
+      <xsd:sequence>
+   	 <xsd:element name="parentFolder" type="xsd:anyURI" maxOccurs="1" minOccurs="1" />
+         <xsd:element name="resourceURL" type="xsd:anyURI" maxOccurs="1" minOccurs="1" />
+    	 <xsd:element name="name" type="xsd:string" maxOccurs="1" minOccurs="1" />
+   	 <xsd:element name="lastModSeq" type="xsd:unsignedLong" maxOccurs="1" minOccurs="0" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <!-- in this version, just an empty complex type -->
+   <xsd:complexType name="ResetBox"/>
+
+
+	<!-- ==================================== -->
+	<!--            Enumerations              -->
+	<!-- ==================================== -->
+
+
+   <xsd:simpleType name="SearchTypeEnum">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="Conversation" />
+         <xsd:enumeration value="Date" />
+         <xsd:enumeration value="Attribute" />
+         <xsd:enumeration value="AllTextAttributes" />
+         <xsd:enumeration value="Flag" />
+         <xsd:enumeration value="WholeWord" />
+         <xsd:enumeration value="VanishedObjects" />
+         <xsd:enumeration value="CreatedObjects" />
+      </xsd:restriction>
+   </xsd:simpleType>
+
+   <xsd:simpleType name="LogicalOperatorEnum">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="And" />
+         <xsd:enumeration value="Or" />
+         <xsd:enumeration value="Not" />
+      </xsd:restriction>
+   </xsd:simpleType>
+
+   <xsd:simpleType name="SortOrderEnum">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="Ascending" />
+         <xsd:enumeration value="Descending" />
+      </xsd:restriction>
+   </xsd:simpleType>
+
+   <xsd:simpleType name="SortTypeEnum">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="Date" />
+         <xsd:enumeration value="Attribute" />
+      </xsd:restriction>
+   </xsd:simpleType>
+
+  
+   <!-- ==================================================================== -->
+   <!-- Elements that can appear as root elements for Light-weight Resources -->
+   <!-- ==================================================================== -->
+
+   
+   <xsd:element name="name" type="xsd:string"/>
+   
+
+</xsd:schema>
