@@ -9,7 +9,7 @@ element as a scalar or an array.
 
 The rules followed by *sax2j* are documented in the
 [Open Mobile Alliance](http://openmobilealliance.org/) standard
-[Common definitions for RESTful Network APIs](http://member.openmobilealliance.org/ftp/Public_documents/ARCH/Permanent_documents/OMA-TS-REST_NetAPI_Common-V1_0-20150108-D.zip).
+[Common definitions for RESTful Network APIs OMA-TS-REST_NetAPI_Common-V1_0-20150108-D](http://member.openmobilealliance.org/ftp/Public_documents/ARCH/Permanent_documents/OMA-TS-REST_NetAPI_Common-V1_0-20150108-D.zip).
 
 
 Building
@@ -24,6 +24,15 @@ Java (tested with 1.7.0_51).
 
 This will create a runnable JAR file, sax2j.jar.
 
+You can test the code with
+
+    ant test
+
+and look at the test report at
+
+    testout\index.html
+
+.
 
 Converting XML to JSON
 ----------------------

@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<project name="sax2j" default="help" basedir=".">
+
+  <path id="build.cp">
+    <fileset dir="lib">
+      <include name="commons-io-2.4/*.jar" />
+      <include name="commons-lang3-3.3.2/*.jar" />
+      <include name="xerces-2_11_0-xml-schema-1.1-beta/*.jar" />
+    </fileset>
+  </path>
+
+  <path id="test.cp">
+    <fileset dir="testlib">
+      <include name="*.jar" />
+    </fileset>
+  </path>
+
+  <target name="build">
+
+    <delete dir="classes" quiet="true"/>
+    <delete file="sax2j.jar" quiet="true"/>
+    <mkdir dir="classes" />
+    <javac includeantruntime="false"
+           srcdir="src"
+           destdir="classes"
+           failonerror="true"
+           source="1.7">
+      <classpath>
+        <path refid="build.cp"/>
+      </classpath>
+    </javac>
+
+    <jar destfile="sax2j.jar"
+         basedir="classes"
+         compress="true">
+      <manifest>
+        <attribute name="Main-Class" value="org.openmobilealliance.arc.sax2j.Main"/>
+      </manifest>
+    </jar>
+
+  </target>
+
+  <target name="testbuild" depends="build">
+    <delete dir="testclasses" quiet="true"/>
+    <mkdir dir="testclasses" />
+    <javac includeantruntime="false"
+           srcdir="testsrc"
+           destdir="testclasses"
+           failonerror="true"
+           source="1.7">
+      <classpath>
+        <pathelement location="classes"/>
+        <path refid="build.cp"/>
+        <path refid="test.cp"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="test" depends="testbuild">
+    <delete dir="testout" quiet="true"/>
+    <mkdir dir="testout" />
+    <junit printsummary="yes"
+           fork="yes">
+      <classpath>
+        <pathelement location="classes"/>
+        <pathelement location="testclasses"/>
+        <path refid="build.cp"/>
+        <path refid="test.cp"/>
+      </classpath>
+
+      <formatter type="plain"/>
+      <formatter type="xml"/>
+
+      <batchtest fork="yes" todir="testout">
+        <fileset dir="testsrc">
+          <include name="**/*Test.java"/>
+        </fileset>
+      </batchtest>
+    </junit>
+
+    <junitreport todir="testout">
+      <fileset dir="testout">
+        <include name="TEST-*.xml"/>
+      </fileset>
+      <report format="frames" todir="testout"/>
+    </junitreport>
+
+  </target>
+
+  <target name="help">
+
+    <java classname="org.apache.tools.ant.Main">
+      <arg value="-projecthelp" />
+    </java>
+
+  </target>
+
+</project>
