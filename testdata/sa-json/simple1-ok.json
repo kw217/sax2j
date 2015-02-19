@@ -12,8 +12,7 @@
           "lastModSeq": 0
         }
       },
-      { "resetBox": null
-      }
+      { "resetBox": null }
     ],
     "callbackData": "This is some data",
     "index": 42,

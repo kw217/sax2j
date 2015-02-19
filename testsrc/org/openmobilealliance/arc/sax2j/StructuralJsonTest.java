@@ -78,7 +78,7 @@ public class StructuralJsonTest
     RenderParams lParams = RenderParams.createPretty();
     lJson.render(lBuffer, lParams);
     String lActual = lBuffer.toString() + "\n";
-    assertEquals("JSON document generated from " + mDocName + " and " + mSchemaName,
+    assertEquals("JSON document generated from " + mDocName + " and " + mSchemaName + " should be " + mJsonName,
                  lExpected,
                  lActual);
   }
