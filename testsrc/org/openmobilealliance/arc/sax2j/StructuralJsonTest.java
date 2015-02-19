@@ -66,7 +66,7 @@ public class StructuralJsonTest
   public void test() throws Exception
   {
     File lFile = new File(JSON_DIR, mJsonName);
-    String lExpected = new String(Files.readAllBytes(lFile.toPath()), "UTF-8");
+    String lExpected = new String(Files.readAllBytes(lFile.toPath()), "UTF-8").replace("\r\n", "\n");
 
     mSchema = new XmlSchema(new File(SCHEMA_DIR, mSchemaName));
     mSchema.parse();
