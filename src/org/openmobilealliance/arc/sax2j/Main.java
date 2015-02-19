@@ -52,7 +52,8 @@ public class Main
     StringBuilder lBuffer = new StringBuilder();
     RenderParams lParams = RenderParams.createPretty();
     lJson.render(lBuffer, lParams);
+    lBuffer.append("\n");
 
-    System.out.println(lBuffer.toString());
+    System.out.print(lBuffer.toString());
   }
 }
