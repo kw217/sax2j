@@ -18,6 +18,12 @@ import org.openmobilealliance.arc.sax2j.ProgressWriter;
 /**
  * Extracts XML and JSON documents from text files saved from Microsoft Word
  * in UTF-8 format.
+ * 
+ * XML extraction is not yet implemented.
+ * 
+ * This class is a simple state-machine parser. State changes are implemented
+ * by method calls - take care, in almost all cases it is essential to
+ * return immediately after such a call, to avoid confusion. 
  */
 public class Extractor
 {
@@ -45,11 +51,12 @@ public class Extractor
   /**
    * Matches end of body. If group 1 matches, it's succeeded; otherwise we've
    * matched something we shouldn't see in the body. Don't forget single-line
-   * JSON documents!
+   * documents!
    */
   private static Pattern END_BODY =
       Pattern.compile("^(</|[]}]*}|[^\\s{<]|\\{.*\\}).*$");
 
+  private Pattern mSectionPattern;
   private String mFilename;
   private String mPrefix;
   private String mSuffix;
@@ -61,11 +68,12 @@ public class Extractor
    * Constructor
    * @param xiFilename Filename to parse. Should be .txt in UTF-8 format as
    * saved from Microsoft Word, in OMA ARC REST NetAPI format.
-   * @param xiPrefix Prefix to use for JSON filenames.
-   * @param xiSuffix Suffix to use for JSON filenames.
+   * @param xiPrefix Prefix to use for subsection filenames.
+   * @param xiSuffix Suffix to use for subsection filenames.
    */
   public Extractor(String xiFilename, String xiPrefix, String xiSuffix)
   {
+    mSectionPattern = JSON_SECTION;
     mFilename = xiFilename;
     mPrefix = xiPrefix;
     mSuffix = xiSuffix;
@@ -83,7 +91,7 @@ public class Extractor
     mReader =
         new BufferedReader(new InputStreamReader(lInput, "UTF-8"));
 
-    findJsonSectionStart();
+    findSectionStart();
   }
 
   /**
@@ -109,13 +117,13 @@ public class Extractor
     mProgress.log("*** UNEXPECTED END OF FILE while " + xiMessage);
   }
 
-  private void findJsonSectionStart() throws IOException
+  private void findSectionStart() throws IOException
   {
     mLine = mReader.readLine();
 
     if (mLine != null)
     {
-      findJsonSectionStartHere();
+      findSectionStartHere();
       return;
     }
 
@@ -126,16 +134,16 @@ public class Extractor
    * Variant that assumes the first line has already been read.
    * @throws IOException
    */
-  private void findJsonSectionStartHere() throws IOException
+  private void findSectionStartHere() throws IOException
   {
     do {
-      Matcher lMatcher = JSON_SECTION.matcher(mLine);
+      Matcher lMatcher = mSectionPattern.matcher(mLine);
 
       if (lMatcher.matches())
       {
-        mProgress.log("Parsing section JSON " + lMatcher.group(3) + ": " +
+        mProgress.log("Parsing section " + lMatcher.group(3) + ": " +
                                   lMatcher.group(1) + " " + lMatcher.group(2));
-        findJsonBegin(lMatcher.group(3), false, false);
+        findHttpBegin(lMatcher.group(3), false, false);
         return;
       }
     }
@@ -144,7 +152,7 @@ public class Extractor
     endOfFile();
   }
 
-  private void findJsonBegin(String xiSection,
+  private void findHttpBegin(String xiSection,
                              boolean xiSeenRequest,
                              boolean xiSeenResponse) throws IOException
   {
@@ -152,14 +160,14 @@ public class Extractor
 
     if (mLine != null)
     {
-      findJsonBeginHere(xiSection, xiSeenRequest, xiSeenResponse);
+      findHttpBeginHere(xiSection, xiSeenRequest, xiSeenResponse);
       return;
     }
 
-    badEndOfFile("searching for beginning of JSON " + xiSection);
+    badEndOfFile("searching for beginning of section " + xiSection);
   }
 
-  private void findJsonBeginHere(String xiSection,
+  private void findHttpBeginHere(String xiSection,
                                  boolean xiSeenRequest,
                                  boolean xiSeenResponse) throws IOException
   {
@@ -173,10 +181,10 @@ public class Extractor
         {
           if (!xiSeenRequest || !xiSeenResponse)
           {
-            mProgress.log("  *** Missing JSON " + (xiSeenRequest ? "response" : "request") + " for " + xiSection);
+            mProgress.log("  *** Missing HTTP " + (xiSeenRequest ? "response" : "request") + " for " + xiSection);
           }
 
-          findJsonSectionStartHere();
+          findSectionStartHere();
           return;
         }
         else
@@ -190,7 +198,7 @@ public class Extractor
           {
             mProgress.log("  *** Already seen a " +
                     (lRequest ? "request" : "response") + " for " + xiSection);
-            findJsonBegin(xiSection, xiSeenRequest, xiSeenResponse);
+            findHttpBegin(xiSection, xiSeenRequest, xiSeenResponse);
             return;
           }
 
@@ -200,7 +208,7 @@ public class Extractor
           {
             // Never has a body
             mProgress.log("  --- Skipping " + lWhat);
-            findJsonBegin(xiSection,
+            findHttpBegin(xiSection,
                           lRequest || xiSeenRequest,
                           lResponse || xiSeenResponse);
             return;
@@ -210,20 +218,20 @@ public class Extractor
             String lSubSection = xiSection + "." + (lRequest ? "1" : "2");
             mProgress.log("  Found start of " + lSubSection + " " + lWhat);
 
-            findJsonBodyStart(xiSection,
-                              lSubSection,
-                              lRequest || xiSeenRequest,
-                              lResponse || xiSeenResponse);
+            findBodyStart(xiSection,
+                          lSubSection,
+                          lRequest || xiSeenRequest,
+                          lResponse || xiSeenResponse);
             return;
           }
         }
       }
     } while ((mLine = mReader.readLine()) != null);
 
-    badEndOfFile("searching for beginning of JSON " + xiSection);
+    badEndOfFile("searching for beginning of section " + xiSection);
   }
 
-  private void findJsonBodyStart(String xiSection,
+  private void findBodyStart(String xiSection,
                                  String xiSubSection,
                                  boolean xiSeenRequest,
                                  boolean xiSeenResponse)
@@ -237,26 +245,26 @@ public class Extractor
       {
         if (lMatcher.group(1) != null)
         {
-          findJsonBody(xiSection, xiSubSection, xiSeenRequest, xiSeenResponse);
+          findBody(xiSection, xiSubSection, xiSeenRequest, xiSeenResponse);
           return;
         }
         else
         {
-          mProgress.log("  *** Failed to find body start in JSON " + xiSubSection);
-          findJsonBeginHere(xiSection, xiSeenRequest, xiSeenResponse);
+          mProgress.log("  *** Failed to find body start in subsection " + xiSubSection);
+          findHttpBeginHere(xiSection, xiSeenRequest, xiSeenResponse);
           return;
         }
       }
     }
 
-    badEndOfFile("searching for body start of JSON " + xiSubSection);
+    badEndOfFile("searching for body start of subsection " + xiSubSection);
   }
 
-  private void findJsonBody(String xiSection,
-                            String xiSubSection,
-                            boolean xiSeenRequest,
-                            boolean xiSeenResponse)
-                                throws IOException
+  private void findBody(String xiSection,
+                        String xiSubSection,
+                        boolean xiSeenRequest,
+                        boolean xiSeenResponse)
+                            throws IOException
   {
     StringBuilder lBuf = new StringBuilder();
 
@@ -269,14 +277,14 @@ public class Extractor
         if (lMatcher.group(1) != null)
         {
           lBuf.append(mLine).append("\n");
-          saveJson(xiSubSection, lBuf.toString());
-          findJsonBegin(xiSection, xiSeenRequest, xiSeenResponse);
+          saveContent(xiSubSection, lBuf.toString());
+          findHttpBegin(xiSection, xiSeenRequest, xiSeenResponse);
           return;
         }
         else
         {
-          mProgress.log("  *** Failed to find body end of JSON " + xiSubSection);
-          findJsonBeginHere(xiSection, xiSeenRequest, xiSeenResponse);
+          mProgress.log("  *** Failed to find body end of subsection " + xiSubSection);
+          findHttpBeginHere(xiSection, xiSeenRequest, xiSeenResponse);
           return;
         }
       }
@@ -286,13 +294,13 @@ public class Extractor
       }
     } while ((mLine = mReader.readLine()) != null);
 
-    badEndOfFile("searching for body end of JSON " + xiSubSection);
+    badEndOfFile("searching for body end of subsection " + xiSubSection);
   }
 
-  private void saveJson(String xiSection, String xiJson) throws IOException
+  private void saveContent(String xiSubSection, String xiContent) throws IOException
   {
-    File lFile = new File(mPrefix + xiSection + mSuffix);
-    FileUtils.writeStringToFile(lFile, xiJson, "UTF-8");
-    mProgress.log("  Done JSON " + xiSection);
+    File lFile = new File(mPrefix + xiSubSection + mSuffix);
+    FileUtils.writeStringToFile(lFile, xiContent, "UTF-8");
+    mProgress.log("  Done subsection " + xiSubSection);
   }
 }
