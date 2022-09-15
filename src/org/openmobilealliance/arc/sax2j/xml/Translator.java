@@ -14,12 +14,7 @@ import org.apache.xerces.xs.XSObjectList;
 import org.apache.xerces.xs.XSParticle;
 import org.apache.xerces.xs.XSTerm;
 import org.apache.xerces.xs.XSTypeDefinition;
-import org.openmobilealliance.arc.sax2j.json.JsonArray;
-import org.openmobilealliance.arc.sax2j.json.JsonNull;
-import org.openmobilealliance.arc.sax2j.json.JsonNumber;
-import org.openmobilealliance.arc.sax2j.json.JsonObject;
-import org.openmobilealliance.arc.sax2j.json.JsonString;
-import org.openmobilealliance.arc.sax2j.json.JsonValue;
+import org.openmobilealliance.arc.sax2j.json.*;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -114,6 +109,9 @@ public class Translator
           lDecl.getTypeDefinition().derivedFrom("http://www.w3.org/2001/XMLSchema", "double", (short)-1))
       {
         lret = JsonNumber.create(lValue);
+      }
+      else if (lDecl.getTypeDefinition().derivedFrom("http://www.w3.org/2001/XMLSchema", "boolean", (short)-1)){
+        lret = JsonBool.create(Boolean.valueOf(lValue));
       }
       else
       {
